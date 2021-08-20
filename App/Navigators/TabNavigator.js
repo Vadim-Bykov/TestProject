@@ -1,9 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {HomeScreen} from '../screens/Home/HomeScreen';
 import {MoviesScreen} from '../screens/Movies/MoviesScreen';
 import {Icon} from 'react-native-elements';
+import {HomeStackNavigator} from './HomeStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,10 +30,8 @@ export const TabNavigator = () => {
         tabBarInactiveTintColor: 'gray',
         headerShown: false,
       })}>
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeStackNavigator} />
       <Tab.Screen name="Movies" component={MoviesScreen} />
     </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({});
