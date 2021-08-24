@@ -13,7 +13,7 @@ export const TabNavigator = () => {
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
 
-          if (route.name === 'Home') {
+          if (route.name === 'HomeTab') {
             iconName = focused
               ? 'ios-information-circle'
               : 'ios-information-circle-outline';
@@ -30,7 +30,7 @@ export const TabNavigator = () => {
         tabBarInactiveTintColor: 'gray',
         headerShown: false,
       })}>
-      <Tab.Screen name="Home" component={HomeStackNavigator} />
+      <Tab.Screen name="HomeTab" component={HomeStackNavigator} />
       <Tab.Screen name="Movies" component={MoviesScreen} />
     </Tab.Navigator>
   );
