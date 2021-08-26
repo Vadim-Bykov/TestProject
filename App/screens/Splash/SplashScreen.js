@@ -5,7 +5,7 @@ import {Loader} from '../../common/Loader';
 export const SplashScreen = () => (
   <ImageBackground
     style={styles.container}
-    source={require('../../assets/cityStart.jpg')}>
+    source={require('../../assets/images/cityStart.jpg')}>
     <Loader />
   </ImageBackground>
 );

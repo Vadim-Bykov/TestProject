@@ -24,7 +24,7 @@ export const signUp = userData => async dispatch => {
 
     dispatch(actionsAuth.setUserData(user));
   } catch (error) {
-    console.error(extractErrorMessage(error));
+    // console.error(error);
 
     dispatch(actionsCommon.setError(extractErrorMessage(error)));
   } finally {
@@ -44,9 +44,8 @@ export const signIn = userData => async dispatch => {
 
     dispatch(actionsAuth.setUserData(user));
   } catch (error) {
-    console.error(extractErrorMessage(error));
-
     dispatch(actionsCommon.setError(extractErrorMessage(error)));
+    // console.error(error);
   } finally {
     dispatch(actionsCommon.setIsFetching(false));
   }
@@ -58,7 +57,7 @@ export const logout = () => async dispatch => {
   try {
     await auth().signOut();
   } catch (error) {
-    console.error(extractErrorMessage(error));
+    // console.error(error);
 
     dispatch(actionsCommon.setError(extractErrorMessage(error)));
   } finally {
