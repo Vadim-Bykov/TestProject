@@ -21,7 +21,6 @@ import * as selectorsCommon from '../../../store/common/selectors';
 import {Loader} from '../../../common/Loader';
 import {Error} from '../../../common/Error';
 import FastImage from 'react-native-fast-image';
-import {Icon} from 'react-native-elements';
 import {UserImage} from './UserImage';
 
 export const AuthPage = ({isSignUp, redirectTo}) => {
@@ -102,11 +101,22 @@ export const AuthPage = ({isSignUp, redirectTo}) => {
     },
   };
 
-  const onSubmit = useCallback(userData => {
-    isSignUp
-      ? dispatch(firebaseService.signUp(userData))
-      : dispatch(firebaseService.signIn(userData));
-  }, []);
+  const onSubmit = useCallback(
+    userData => {
+      if (isSignUp) {
+        dispatch(
+          firebaseService.signUp({
+            ...userData,
+            uri: imageData?.uri,
+            fileName: imageData?.fileName,
+          }),
+        );
+      } else {
+        dispatch(firebaseService.signIn(userData));
+      }
+    },
+    [imageData],
+  );
 
   return (
     <>

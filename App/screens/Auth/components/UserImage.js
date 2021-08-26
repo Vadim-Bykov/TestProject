@@ -24,8 +24,6 @@ export const UserImage = ({imageUri, setImageData, width}) => {
           ToastAndroid.show('Adding an image was canceled', ToastAndroid.SHORT);
       } else {
         const imageData = assets[0];
-        console.log('assets', assets);
-        console.log('imageData', imageData);
 
         setImageData(imageData);
       }

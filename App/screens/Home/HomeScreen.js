@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-import {Button} from 'react-native-elements';
+import {Button, Avatar} from 'react-native-elements';
 import * as firebaseService from '../../api/firebaseService';
 import {useDispatch, useSelector} from 'react-redux';
 import * as selectorsAuth from '../../store/auth/selectors';
@@ -23,9 +23,9 @@ export const HomeScreen = () => {
   const isFetching = useSelector(selectorsCommon.getIsFetching);
   const error = useSelector(selectorsCommon.getError);
 
-  console.log(error);
-
   const logout = useCallback(() => dispatch(firebaseService.logout()), []);
+
+  if (!userData) return null;
 
   return (
     <>
@@ -39,6 +39,9 @@ export const HomeScreen = () => {
           <>
             <Text style={styles.item}>Welcome {userData.email}</Text>
             <Text style={styles.item}>Welcome {userData.displayName}</Text>
+            {userData.photoURL && (
+              <Avatar source={{uri: userData.photoURL}} rounded size={100} />
+            )}
 
             <Button
               activeOpacity={0.6}
