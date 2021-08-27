@@ -20,20 +20,13 @@ const uploadPhoto = async (fileName, uri) => {
   }
 };
 
-const saveUserData = ({
-  uid,
-  photoURL,
-  displayName,
-  email,
-  phoneNumber = null,
-}) => {
+const saveUserData = ({uid, photoURL, displayName, email}) => {
   try {
     firestore().collection('users').doc(uid).set({
       displayName,
       email,
       photoURL,
       uid,
-      phoneNumber,
     });
   } catch (error) {
     Promise.reject(error);
@@ -136,18 +129,18 @@ export const logout = () => async dispatch => {
 export const updateUserProfile = userData => async dispatch => {
   dispatch(actionsCommon.setIsFetching(true));
 
-  const {email, photoURL, userName, phoneNumber} = userData;
-
-  console.log(userData);
+  const {currentEmail, newEmail, photoURL, userName, password} = userData;
 
   try {
+    newEmail &&
+      (await auth().signInWithEmailAndPassword(currentEmail, password));
+
     await Promise.all([
       auth().currentUser.updateProfile({
         displayName: userName,
         photoURL,
       }),
-      auth().currentUser.updateEmail(email),
-      // auth().currentUser.updatePhoneNumber(phoneNumber),
+      newEmail && auth().currentUser.updateEmail(newEmail),
     ]);
 
     const user = await auth().currentUser;
@@ -156,7 +149,7 @@ export const updateUserProfile = userData => async dispatch => {
 
     dispatch(actionsAuth.setUserData(user));
 
-    console.log(user);
+    return true;
   } catch (error) {
     // console.error(error);
 

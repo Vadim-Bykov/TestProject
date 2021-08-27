@@ -71,10 +71,17 @@ export const AuthPage = ({isSignUp, redirectTo}) => {
 
   const passwordConfig = {
     leftIcon: {iconName: 'lock'},
+    rightIcon: {
+      rightIconName: secureTextEntryPassword
+        ? 'eye-check-outline'
+        : 'eye-off-outline',
+      rightIconType: 'material-community',
+      onPress: onChangeSecureTextEntryPassword,
+    },
     width,
     placeholder: 'Enter your password',
     secureTextEntry: secureTextEntryPassword,
-    onChangeSecureTextEntry: onChangeSecureTextEntryPassword,
+    // onChangeSecureTextEntry: onChangeSecureTextEntryPassword,
     control,
     name: 'password',
     rules: {
@@ -87,10 +94,17 @@ export const AuthPage = ({isSignUp, redirectTo}) => {
 
   const confirmPasswordConfig = {
     leftIcon: {iconName: 'lock'},
+    rightIcon: {
+      rightIconName: secureTextEntryConfirmPassword
+        ? 'eye-check-outline'
+        : 'eye-off-outline',
+      rightIconType: 'material-community',
+      onPress: onChangeSecureTextEntryConfirmPassword,
+    },
     width,
     placeholder: 'Confirm your password',
     secureTextEntry: secureTextEntryConfirmPassword,
-    onChangeSecureTextEntry: onChangeSecureTextEntryConfirmPassword,
+    // onChangeSecureTextEntry: onChangeSecureTextEntryConfirmPassword,
     control,
     name: 'confirmPassword',
     rules: {

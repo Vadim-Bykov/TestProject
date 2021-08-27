@@ -15,6 +15,7 @@ import * as selectorsAuth from '../../store/auth/selectors';
 import * as selectorsCommon from '../../store/common/selectors';
 import {colors} from '../../consts/consts';
 import {Loader} from '../../common/Loader';
+import {Error} from '../../common/Error';
 
 export const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ export const HomeScreen = () => {
   return (
     <>
       {isFetching && <Loader />}
+      {error && <Error />}
 
       <SafeAreaView style={styles.container}>
         <ScrollView

@@ -7,11 +7,16 @@ import {colors} from '../consts/consts';
 export const CustomInput = React.memo(({inputConfig}) => {
   const {
     leftIcon: {iconName, type = 'material', color = colors.DARK_YELLOW},
+    rightIcon: {
+      rightIconName = '',
+      rightIconType = 'material',
+      rightIconColor = colors.DARK_YELLOW,
+      onPress = () => {},
+    } = {},
     width,
     placeholder,
     multiline = false,
     secureTextEntry = false,
-    onChangeSecureTextEntry,
     control,
     name,
     rules,
@@ -20,8 +25,8 @@ export const CustomInput = React.memo(({inputConfig}) => {
     borderColor = colors.DARK_YELLOW,
     textColor = colors.DARK_YELLOW,
     setPreloadedImage = () => {},
+    editable = true,
   } = inputConfig;
-  //   console.log(iconName);
 
   const {field, fieldState} = useController({
     control,
@@ -45,12 +50,14 @@ export const CustomInput = React.memo(({inputConfig}) => {
       placeholder={placeholder}
       leftIcon={{type, name: iconName, color}}
       rightIcon={
-        name.toLowerCase().includes('password') && {
-          name: secureTextEntry ? 'eye-check-outline' : 'eye-off-outline',
-          type: 'material-community',
-          color,
-          onPress: onChangeSecureTextEntry,
-        }
+        rightIconName
+          ? {
+              name: rightIconName,
+              type: rightIconType,
+              color: rightIconColor,
+              onPress,
+            }
+          : null
       }
       errorMessage={fieldState.error && fieldState.error.message}
       errorStyle={styles.error}
@@ -58,6 +65,7 @@ export const CustomInput = React.memo(({inputConfig}) => {
       placeholderTextColor="#c2c2d6"
       multiline={multiline}
       onBlur={preloadImage}
+      editable={editable}
     />
   );
 });
