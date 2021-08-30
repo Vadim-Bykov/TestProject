@@ -121,6 +121,7 @@ export const AuthPage = ({isSignUp, redirectTo}) => {
         dispatch(
           firebaseService.signUp({
             ...userData,
+            email: userData.email.trim(),
             uri: imageData?.uri,
             fileName: imageData?.fileName,
           }),
@@ -151,7 +152,7 @@ export const AuthPage = ({isSignUp, redirectTo}) => {
                   <UserImage
                     imageUri={imageData && imageData.uri}
                     setImageData={setImageData}
-                    width={width}
+                    width={width * 0.3}
                   />
                 ) : (
                   <FastImage

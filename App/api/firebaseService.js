@@ -129,16 +129,21 @@ export const logout = () => async dispatch => {
 export const updateUserProfile = userData => async dispatch => {
   dispatch(actionsCommon.setIsFetching(true));
 
-  const {currentEmail, newEmail, photoURL, userName, password} = userData;
+  const {currentEmail, newEmail, photoURL, userName, password, fileName} =
+    userData;
+
+  const isLocalPhoto = photoURL.includes('file:/');
 
   try {
     newEmail &&
       (await auth().signInWithEmailAndPassword(currentEmail, password));
 
+    const newUrl = isLocalPhoto ? await uploadPhoto(fileName, photoURL) : null;
+
     await Promise.all([
       auth().currentUser.updateProfile({
         displayName: userName,
-        photoURL,
+        photoURL: newUrl || photoURL || null,
       }),
       newEmail && auth().currentUser.updateEmail(newEmail),
     ]);

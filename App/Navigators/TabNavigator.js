@@ -3,14 +3,16 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {MoviesScreen} from '../screens/Movies/MoviesScreen';
 import {Icon} from 'react-native-elements';
 import {HomeStackNavigator} from './HomeStackNavigator';
-import {ProfileScreen} from '../screens/Profile/ProfileScreen';
+import {EditProfileScreen} from '../screens/Profile/EditProfileScreen';
 import {
   LayoutAnimation,
   Platform,
   StyleSheet,
   Text,
   UIManager,
+  useWindowDimensions,
 } from 'react-native';
+import {ProfileStackNavigator} from './ProfileStackNavigator';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -20,9 +22,21 @@ if (Platform.OS === 'android') {
 
 const Tab = createBottomTabNavigator();
 
-const MyText = ({children, color}) => (
-  <Text style={[styles.tabBarLabel, {color}]}>{children}</Text>
-);
+const MyText = ({children, color}) => {
+  const {width, height} = useWindowDimensions();
+
+  const isLandscape = width > height;
+  return (
+    <Text
+      style={[
+        styles.tabBarLabel,
+        {color, marginLeft: isLandscape ? 15 : 0},
+        {color, marginTop: isLandscape ? 5 : 0},
+      ]}>
+      {children}
+    </Text>
+  );
+};
 
 export const TabNavigator = () => {
   return (
@@ -32,7 +46,7 @@ export const TabNavigator = () => {
           let iconName;
           let type;
 
-          if (route.name === 'HomeTab') {
+          if (route.name === 'Home') {
             type = 'ionicon';
             iconName = focused
               ? 'ios-information-circle'
@@ -54,7 +68,7 @@ export const TabNavigator = () => {
           // Platform.OS === 'ios' &&
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
           switch (route.name) {
-            case 'HomeTab':
+            case 'Home':
               return focused && <MyText color={color}>Home</MyText>;
 
             case 'Movies':
@@ -68,14 +82,8 @@ export const TabNavigator = () => {
           }
         },
       })}>
-      <Tab.Screen name="HomeTab" component={HomeStackNavigator} />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        // options={{
-        //   unmountOnBlur: true,
-        // }}
-      />
+      <Tab.Screen name="Home" component={HomeStackNavigator} />
+      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
       <Tab.Screen name="Movies" component={MoviesScreen} />
     </Tab.Navigator>
   );

@@ -20,24 +20,19 @@ export const CustomInput = React.memo(({inputConfig}) => {
     control,
     name,
     rules,
-    defaultValue = '',
+    // defaultValue = '',
     label = false,
     borderColor = colors.DARK_YELLOW,
     textColor = colors.DARK_YELLOW,
-    setPreloadedImage = () => {},
     editable = true,
   } = inputConfig;
 
   const {field, fieldState} = useController({
     control,
     name,
-    defaultValue,
+    // defaultValue,
     rules,
   });
-
-  const preloadImage = useCallback(() => {
-    setPreloadedImage(field.value);
-  }, [field.value]);
 
   return (
     <Input
@@ -64,7 +59,6 @@ export const CustomInput = React.memo(({inputConfig}) => {
       secureTextEntry={secureTextEntry}
       placeholderTextColor="#c2c2d6"
       multiline={multiline}
-      onBlur={preloadImage}
       editable={editable}
     />
   );

@@ -36,18 +36,18 @@ export const UserImage = ({imageUri, setImageData, width}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View>
       <Icon
         type="entypo"
         name="add-user"
         color={colors.DARK_YELLOW}
-        size={imageUri ? 25 : width * 0.3}
+        size={imageUri ? 25 : width}
         containerStyle={imageUri ? styles.iconWithPhoto : styles.icon}
         onPress={addPhoto}
       />
 
       {imageUri ? (
-        <Avatar rounded source={{uri: imageUri}} size={width * 0.3} />
+        <Avatar rounded source={{uri: imageUri}} size={width} />
       ) : (
         <Text style={styles.text}>Add your image</Text>
       )}
@@ -56,10 +56,6 @@ export const UserImage = ({imageUri, setImageData, width}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    //  position: 'relative',
-  },
-
   icon: {
     marginLeft: 20,
   },
