@@ -1,4 +1,10 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {useForm, useWatch} from 'react-hook-form';
 import {
   LayoutAnimation,
@@ -20,6 +26,7 @@ import * as selectorsCommon from '../../store/common/selectors';
 import {Loader} from '../../common/Loader';
 import {Error} from '../../common/Error';
 import {UserImage} from '../Auth/components/UserImage';
+import FastImage from 'react-native-fast-image';
 
 if (
   Platform.OS === 'android' &&
@@ -47,6 +54,17 @@ export const EditProfileScreen = ({navigation}) => {
   });
 
   const photoUrlInputValue = useWatch({control, name: 'photoURL'});
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: ({}) => (
+        <FastImage
+          source={{uri: userData.photoURL}}
+          style={styles.headerImage}
+        />
+      ),
+    });
+  }, []);
 
   useEffect(() => {
     if (!isAdditionalInputs) {
@@ -157,7 +175,6 @@ export const EditProfileScreen = ({navigation}) => {
   const photoUrlConfig = useMemo(
     () => ({
       leftIcon: {iconName: 'photo-camera', color: colors.BLUE},
-      // width: width * 0.9,
       width: width * 0.86,
       multiline: true,
       placeholder: userData?.photoURL
@@ -179,7 +196,7 @@ export const EditProfileScreen = ({navigation}) => {
         firebaseService.updateUserProfile({
           ...data,
           photoURL: data.photoURL.trim(),
-          // newEmail: data.newEmail.trim(),
+          newEmail: data.newEmail ? data.newEmail.trim() : null,
           fileName: imageData?.fileName,
         }),
       );
@@ -218,19 +235,12 @@ export const EditProfileScreen = ({navigation}) => {
           <View style={styles.photoUrlContainer}>
             <CustomInput inputConfig={photoUrlConfig} />
             <View>
-              {/* <Avatar
-                source={{
-                  uri: preloadedImage || userData?.photoURL || DEFAULT_AVATAR,
-                }}
-                rounded
-                size={width * 0.15}
-              /> */}
-
               <UserImage
                 imageUri={photoUrlInputValue || DEFAULT_AVATAR}
                 setImageData={setImageData}
                 width={width * 0.2}
               />
+
               <Icon
                 type="feather"
                 name="delete"
@@ -254,6 +264,12 @@ export const EditProfileScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  headerImage: {
+    width: 35,
+    height: 35,
+    borderRadius: 20,
+  },
+
   scrollViewContainer: {
     alignItems: 'center',
   },

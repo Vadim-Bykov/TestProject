@@ -3,7 +3,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {MoviesScreen} from '../screens/Movies/MoviesScreen';
 import {Icon} from 'react-native-elements';
 import {HomeStackNavigator} from './HomeStackNavigator';
-import {EditProfileScreen} from '../screens/Profile/EditProfileScreen';
 import {
   LayoutAnimation,
   Platform,
@@ -13,6 +12,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import {ProfileStackNavigator} from './ProfileStackNavigator';
+import {colors} from '../consts/consts';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -46,15 +46,15 @@ export const TabNavigator = () => {
           let iconName;
           let type;
 
-          if (route.name === 'Home') {
+          if (route.name === 'HomeTab') {
             type = 'ionicon';
             iconName = focused
               ? 'ios-information-circle'
               : 'ios-information-circle-outline';
-          } else if (route.name === 'Movies') {
+          } else if (route.name === 'MoviesTab') {
             type = 'ionicon';
             iconName = focused ? 'ios-list' : 'ios-list-outline';
-          } else if (route.name === 'Profile') {
+          } else if (route.name === 'ProfileTab') {
             type = 'font-awesome';
             iconName = focused ? 'user-circle-o' : 'user';
           }
@@ -65,16 +65,15 @@ export const TabNavigator = () => {
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
         tabBarLabel: ({focused, color}) => {
-          // Platform.OS === 'ios' &&
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
           switch (route.name) {
-            case 'Home':
+            case 'HomeTab':
               return focused && <MyText color={color}>Home</MyText>;
 
-            case 'Movies':
+            case 'MoviesTab':
               return focused && <MyText color={color}>Movies</MyText>;
 
-            case 'Profile':
+            case 'ProfileTab':
               return focused && <MyText color={color}>Profile</MyText>;
 
             default:
@@ -82,9 +81,9 @@ export const TabNavigator = () => {
           }
         },
       })}>
-      <Tab.Screen name="Home" component={HomeStackNavigator} />
-      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
-      <Tab.Screen name="Movies" component={MoviesScreen} />
+      <Tab.Screen name="HomeTab" component={HomeStackNavigator} />
+      <Tab.Screen name="ProfileTab" component={ProfileStackNavigator} />
+      <Tab.Screen name="MoviesTab" component={MoviesScreen} />
     </Tab.Navigator>
   );
 };

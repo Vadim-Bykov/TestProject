@@ -1,6 +1,7 @@
 import React, {useCallback} from 'react';
 import {Platform, StyleSheet, Text, ToastAndroid, View} from 'react-native';
 import {Icon, Avatar} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {useDispatch} from 'react-redux';
 import {colors} from '../../../consts/consts';
@@ -8,8 +9,8 @@ import * as actionsCommon from '../../../store/common/actions';
 
 const options = {
   mediaType: 'photo',
-  maxWidth: 300,
-  maxHeight: 300,
+  maxWidth: 500,
+  maxHeight: 500,
 };
 
 export const UserImage = ({imageUri, setImageData, width}) => {
@@ -47,7 +48,11 @@ export const UserImage = ({imageUri, setImageData, width}) => {
       />
 
       {imageUri ? (
-        <Avatar rounded source={{uri: imageUri}} size={width} />
+        // <Avatar rounded source={{uri: imageUri}} size={width} />
+        <FastImage
+          source={{uri: imageUri}}
+          style={{width, height: width, borderRadius: width / 2}}
+        />
       ) : (
         <Text style={styles.text}>Add your image</Text>
       )}
