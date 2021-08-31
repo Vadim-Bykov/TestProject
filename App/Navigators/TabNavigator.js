@@ -1,6 +1,5 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {MoviesScreen} from '../screens/Movies/MoviesScreen';
 import {Icon} from 'react-native-elements';
 import {HomeStackNavigator} from './HomeStackNavigator';
 import {
@@ -12,7 +11,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import {ProfileStackNavigator} from './ProfileStackNavigator';
-import {colors} from '../consts/consts';
+import {MediaStackNavigator} from './MediaStackNavigator';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -83,7 +82,7 @@ export const TabNavigator = () => {
       })}>
       <Tab.Screen name="HomeTab" component={HomeStackNavigator} />
       <Tab.Screen name="ProfileTab" component={ProfileStackNavigator} />
-      <Tab.Screen name="MoviesTab" component={MoviesScreen} />
+      <Tab.Screen name="MoviesTab" component={MediaStackNavigator} />
     </Tab.Navigator>
   );
 };

@@ -96,13 +96,13 @@ const styles = StyleSheet.create({
 
   btnEditContainer: {
     borderRadius: 15,
+    marginVertical: 10,
   },
 
   btn: {
     width: 100,
     borderRadius: 15,
     borderWidth: 1,
-    marginVertical: 10,
   },
 
   btnEdit: {

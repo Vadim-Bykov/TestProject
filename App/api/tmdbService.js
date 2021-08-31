@@ -7,4 +7,21 @@ const instance = axios.create({
   },
 });
 
-export const getMovies = () => instance.get('');
+export const getGenres = mediaType =>
+  instance.get(`/genre/${mediaType}/list`).then(res => res.data);
+
+export const getMovies = ({mediaType, timeWindow, page = 3}) =>
+  instance
+    .get(`/trending/${mediaType}/${timeWindow}`, {params: {page}})
+    .then(res => res.data);
+
+export const castInfo = ({mediaType, mediaId}) =>
+  instance.get(`/${mediaType}/${mediaId}/credits`).then(res => res.data);
+
+export const getDetails = ({mediaType, mediaId}) =>
+  instance.get(`/${mediaType}/${mediaId}`);
+
+export const getMediaByGenre = ({mediaType, genreId, page}) =>
+  instance
+    .get(`/discover/${mediaType}`, {params: {page, with_genres: genreId}})
+    .then(res => res.data);
