@@ -4,7 +4,7 @@ import {Button} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {colors} from '../../consts/consts';
+import {colors, DEFAULT_AVATAR} from '../../consts/consts';
 import * as selectorsAuth from '../../store/auth/selectors';
 import * as selectorsCommon from '../../store/common/selectors';
 import * as firebaseService from '../../api/firebaseService';
@@ -30,7 +30,7 @@ export const ProfileScreen = ({navigation}) => {
       <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
           <FastImage
-            source={{uri: userData.photoURL}}
+            source={{uri: userData.photoURL || DEFAULT_AVATAR}}
             style={[
               styles.userImage,
               {
