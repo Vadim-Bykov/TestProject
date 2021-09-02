@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import {ScrollView, StyleSheet, Switch, Text, View} from 'react-native';
@@ -13,12 +14,16 @@ import * as tmdbService from '../../api/tmdbService';
 import * as actionsMedia from '../../store/media/actions';
 import * as actionsCommon from '../../store/common/actions';
 import * as selectorsMedia from '../../store/media/selectors';
+import * as selectorsCommon from '../../store/common/selectors';
 import {Genres} from './components/Genres';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {ModeSwitch} from './components/ModeSwitch';
+import {MediaTypeToggle} from './components/MediaTypeToggle';
+import {Loader} from '../../common/Loader';
+import {Pager} from './components/Pager';
 
-const MediaContext = createContext();
-
-export const useMediaContext = () => useContext(MediaContext);
+// const MediaContext = createContext();
+// export const useMediaContext = () => useContext(MediaContext);
 
 export const MediaScreen = ({navigation}) => {
   // const [mediaType, setMediaType] = useState('movie');
@@ -27,11 +32,11 @@ export const MediaScreen = ({navigation}) => {
 
   const [isTrending, setIsTrending] = useState(false);
   const [mode, setMode] = useState('trending');
-  console.log(mode);
   const mediaType = useSelector(selectorsMedia.getMediaType);
   const timeWindow = useSelector(selectorsMedia.getTimeWindow);
   const page = useSelector(selectorsMedia.getPage);
   const activeGenre = useSelector(selectorsMedia.getActiveGenre);
+  const error = useSelector(selectorsCommon.getError);
 
   const dispatch = useDispatch();
 
@@ -78,27 +83,38 @@ export const MediaScreen = ({navigation}) => {
   useEffect(() => {
     dispatch(actionsMedia.setActiveGenre(genres.data?.genres[0].id));
   }, [genres.data]);
-  // console.log('media', media.data);
-  // console.log('genres', genres.data);
+
+  const isLoader = useMemo(() => {
+    return (
+      genres.isLoading ||
+      genres.isFetching ||
+      media.isLoading ||
+      media.isFetching
+    );
+  }, [genres.isLoading, genres.isFetching, media.isLoading, media.isFetching]);
 
   return (
     <>
+      {error && <Error />}
+      {isLoader && <Loader />}
+
       <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-          <Genres genres={genres.data?.genres} />
+          <Genres genres={genres.data?.genres} mode={mode} />
 
-          <View style={styles.toggle}>
-            <Text>Trending</Text>
-            <Switch value={isTrending} onValueChange={toggleMode} />
-            <Text>By genre</Text>
-          </View>
+          <ModeSwitch isTrending={isTrending} toggleMode={toggleMode} />
+          <MediaTypeToggle
+            mediaType={mediaType}
+            toggleMediaType={toggleMediaType}
+          />
+
+          <Pager mediaDate={media.data?.results} mediaType={mediaType} />
+
           <Button title="Details" onPress={goToDetails} />
           <Button
             title={`Page ${page}`}
             onPress={() => dispatch(actionsMedia.setPage(page + 1))}
           />
-
-          <Button title={`Media type ${mediaType}`} onPress={toggleMediaType} />
         </ScrollView>
       </SafeAreaView>
     </>
@@ -112,9 +128,5 @@ const styles = StyleSheet.create({
 
   scrollViewContainer: {
     alignItems: 'center',
-  },
-
-  toggle: {
-    flexDirection: 'row',
   },
 });
