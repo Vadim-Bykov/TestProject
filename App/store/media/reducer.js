@@ -33,10 +33,16 @@ export const mediaReducer = (state = initialState, action) => {
         page: action.page,
       };
 
-    case actionTypes.MEDIA_ACTIVE_GENRE:
+    case actionTypes.MEDIA_SET_ACTIVE_GENRE:
       return {
         ...state,
         activeGenre: action.activeGenre,
+      };
+
+    case actionTypes.MEDIA_SET_TOTAL_PAGES:
+      return {
+        ...state,
+        totalPages: action.totalPages,
       };
 
     default:

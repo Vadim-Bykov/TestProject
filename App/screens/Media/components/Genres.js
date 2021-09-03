@@ -11,6 +11,7 @@ export const Genres = React.memo(({genres, mode}) => {
 
   const onSetGenre = useCallback(genreId => {
     dispatch(actionsMedia.setActiveGenre(genreId));
+    dispatch(actionsMedia.setPage(1));
   }, []);
 
   const renderItem = useCallback(

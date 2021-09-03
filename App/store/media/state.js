@@ -5,4 +5,5 @@ export const initialState = {
   timeWindow: 'week',
   page: 1,
   activeGenre: null,
+  totalPages: null,
 };

@@ -26,6 +26,11 @@ export const setPage = page => ({
 });
 
 export const setActiveGenre = activeGenre => ({
-  type: actionTypes.MEDIA_ACTIVE_GENRE,
+  type: actionTypes.MEDIA_SET_ACTIVE_GENRE,
   activeGenre,
+});
+
+export const setTotalPages = totalPages => ({
+  type: actionTypes.MEDIA_SET_TOTAL_PAGES,
+  totalPages,
 });

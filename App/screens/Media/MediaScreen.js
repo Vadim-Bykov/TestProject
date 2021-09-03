@@ -6,9 +6,9 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {ScrollView, StyleSheet, Switch, Text, View} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
-import {useQuery} from 'react-query';
+import {useQuery, useQueryClient} from 'react-query';
 import {useDispatch, useSelector} from 'react-redux';
 import * as tmdbService from '../../api/tmdbService';
 import * as actionsMedia from '../../store/media/actions';
@@ -40,17 +40,24 @@ export const MediaScreen = ({navigation}) => {
 
   const dispatch = useDispatch();
 
+  const queryClient = useQueryClient();
+
   const media =
     activeGenre && mode === 'genre'
-      ? useQuery(['mediaData', mediaType, activeGenre, page], () =>
-          tmdbService.getMediaByGenre({
-            mediaType,
-            genreId: activeGenre,
-            page,
-          }),
+      ? useQuery(
+          ['mediaData', mediaType, activeGenre, page],
+          () =>
+            tmdbService.getMediaByGenre({
+              mediaType,
+              genreId: activeGenre,
+              page,
+            }),
+          {keepPreviousData: true},
         )
-      : useQuery(['mediaData', mediaType, timeWindow, page], () =>
-          tmdbService.getMovies({mediaType, timeWindow, page}),
+      : useQuery(
+          ['mediaData', mediaType, timeWindow, page],
+          () => tmdbService.getMovies({mediaType, timeWindow, page}),
+          {keepPreviousData: true},
         );
 
   const genres = useQuery(['genres', mediaType], () =>
@@ -58,26 +65,59 @@ export const MediaScreen = ({navigation}) => {
   );
 
   useEffect(() => {
-    if (media.data) dispatch(actionsMedia.setMediaData(media.data.results));
+    if (media.data?.total_pages > page) {
+      activeGenre && mode === 'genre'
+        ? queryClient.prefetchQuery(
+            ['mediaData', mediaType, activeGenre, page + 1],
+            () =>
+              tmdbService.getMediaByGenre({
+                mediaType,
+                genreId: activeGenre,
+                page: page + 1,
+              }),
+          )
+        : queryClient.prefetchQuery(
+            ['mediaData', mediaType, timeWindow, page + 1],
+            () =>
+              tmdbService.getMovies({mediaType, timeWindow, page: page + 1}),
+          );
+    }
+  }, [media.data, mediaType, activeGenre, page, queryClient]);
+
+  useEffect(() => {
+    if (media.data) {
+      dispatch(actionsMedia.setMediaData(media.data.results));
+      dispatch(actionsMedia.setTotalPages(media.data.total_pages));
+    }
     if (genres.data) dispatch(actionsMedia.setGenres(genres.data.genres));
   }, [media.data, genres.data]);
 
   useEffect(() => {
-    if (media?.isError) dispatch(actionsCommon.setError(media.error.message));
-    if (genres?.isError) dispatch(actionsCommon.setError(genres.error.message));
+    if (media?.isError)
+      dispatch(
+        actionsCommon.setError(media.error.response.data.status_message),
+      );
+    if (genres?.isError)
+      dispatch(
+        actionsCommon.setError(genres.error.response.data.status_message),
+      );
   }, [media?.isError, genres?.isError]);
 
-  const goToDetails = useCallback(() => navigation.navigate('Details'), []);
+  const goToDetails = useCallback(id => {
+    navigation.navigate('Details', {id});
+  }, []);
 
   const toggleMode = useCallback(() => {
     setIsTrending(prev => !prev);
     setMode(mode === 'trending' ? 'genre' : 'trending');
+    dispatch(actionsMedia.setPage(1));
   }, [mode, genres]);
 
   const toggleMediaType = useCallback(() => {
     // setMediaType(prev => (prev === 'movie' ? 'tv' : 'movie'))
     dispatch(actionsMedia.setMediaType(mediaType === 'movie' ? 'tv' : 'movie'));
     dispatch(actionsMedia.setActiveGenre(genres.data?.genres[0].id));
+    dispatch(actionsMedia.setPage(1));
   }, [mediaType, genres.data]);
 
   useEffect(() => {
@@ -108,12 +148,10 @@ export const MediaScreen = ({navigation}) => {
             toggleMediaType={toggleMediaType}
           />
 
-          <Pager mediaDate={media.data?.results} mediaType={mediaType} />
-
-          <Button title="Details" onPress={goToDetails} />
-          <Button
-            title={`Page ${page}`}
-            onPress={() => dispatch(actionsMedia.setPage(page + 1))}
+          <Pager
+            mediaType={mediaType}
+            goToDetails={goToDetails}
+            // mediaDate={media.data?.results}
           />
         </ScrollView>
       </SafeAreaView>
