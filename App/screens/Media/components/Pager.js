@@ -27,6 +27,7 @@ export const Pager = React.memo(({mediaType, goToDetails}) => {
           scroll={scroll}
           itemWidth={itemWidth}
           goToDetails={goToDetails}
+          mediaType={mediaType}
         />
       );
     },

@@ -1,3 +1,5 @@
+import {COMMON_ERROR_MESSAGE} from '../consts/consts';
+
 export const extractErrorMessage = error => {
   let errorMessage = '';
   if (error.userInfo) {

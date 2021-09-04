@@ -27,6 +27,7 @@ export const Slide = React.memo(
     scroll,
     itemWidth,
     goToDetails,
+    mediaType,
   }) => {
     const {opacity, shadowOpacity, elevation, scale, translateX} = useAnimated({
       scroll,
@@ -50,7 +51,7 @@ export const Slide = React.memo(
       dispatch(actionsMedia.setPage(page === 1 ? 1 : page - 1));
     }, [page, totalPages]);
 
-    const goToDetailsScreen = useCallback(() => goToDetails(id), []);
+    const goToDetailsScreen = useCallback(() => goToDetails(id, mediaType), []);
 
     return (
       <>

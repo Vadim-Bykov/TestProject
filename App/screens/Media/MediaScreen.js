@@ -103,8 +103,8 @@ export const MediaScreen = ({navigation}) => {
       );
   }, [media?.isError, genres?.isError]);
 
-  const goToDetails = useCallback(id => {
-    navigation.navigate('Details', {id});
+  const goToDetails = useCallback((id, mediaType) => {
+    navigation.navigate('Details', {id, mediaType});
   }, []);
 
   const toggleMode = useCallback(() => {

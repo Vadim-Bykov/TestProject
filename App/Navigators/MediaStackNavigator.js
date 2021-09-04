@@ -20,8 +20,8 @@ export const MediaStackNavigator = () => {
         name="Details"
         component={MediaDetailsScreen}
         options={{
-          //  headerTransparent: true,
-          headerBackground: () => null,
+          headerTransparent: true,
+          // headerBackground: () => null,
           headerBackTitleVisible: false,
           headerTitle: '',
           headerBackImage: () => (

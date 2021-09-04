@@ -8,6 +8,8 @@ export const DEFAULT_AVATAR =
 export const DEFAULT_MOVIE_IMAGE =
   'https://target.scene7.com/is/image/Target/GUEST_e684225b-5a68-49b2-8fc3-493e515ef4ca?wid=488&hei=488&fmt=pjpeg';
 
+export const COMMON_ERROR_MESSAGE = 'Something was wrong!';
+
 export const STACK_SCREEN_OPTIONS = {
   transitionSpec: {
     open: {animation: 'spring'},

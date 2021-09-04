@@ -19,7 +19,7 @@ export const castInfo = ({mediaType, mediaId}) =>
   instance.get(`/${mediaType}/${mediaId}/credits`).then(res => res.data);
 
 export const getDetails = ({mediaType, mediaId}) =>
-  instance.get(`/${mediaType}/${mediaId}`);
+  instance.get(`/${mediaType}/${mediaId}`).then(res => res.data);
 
 export const getMediaByGenre = ({mediaType, genreId, page}) =>
   instance
