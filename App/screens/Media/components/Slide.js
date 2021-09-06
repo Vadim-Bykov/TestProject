@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {StyleSheet, Text, View, Animated} from 'react-native';
+import {StyleSheet, Text, View, Animated, Image} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {FAB} from 'react-native-elements/dist/buttons/FAB';
 import FastImage from 'react-native-fast-image';
@@ -12,6 +12,7 @@ import {useAnimated} from '../hooks/useAnimated';
 import * as selectorsMedia from '../../../store/media/selectors';
 import {useDispatch, useSelector} from 'react-redux';
 import * as actionsMedia from '../../../store/media/actions';
+import {SharedElement} from 'react-navigation-shared-element';
 
 const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
 
@@ -77,6 +78,7 @@ export const Slide = React.memo(
               transform: [{scale}, {translateX}],
             },
           ]}>
+          {/* <SharedElement id={id.toString()}> */}
           <AnimatedFastImage
             source={{
               uri: posterPath
@@ -88,7 +90,7 @@ export const Slide = React.memo(
               {
                 width: width * 0.75,
                 height: width,
-                elevation,
+                // elevation,
               },
             ]}>
             <FAB
@@ -98,6 +100,8 @@ export const Slide = React.memo(
               onPress={goToDetailsScreen}
             />
           </AnimatedFastImage>
+          {/* </SharedElement> */}
+
           <Animated.View style={[styles.infoBlock, {opacity}]}>
             <Text style={styles.title}>{title}</Text>
             <View style={styles.voteAverageBlock}>

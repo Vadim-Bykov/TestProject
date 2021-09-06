@@ -15,7 +15,7 @@ export const getMovies = ({mediaType, timeWindow, page = 3}) =>
     .get(`/trending/${mediaType}/${timeWindow}`, {params: {page}})
     .then(res => res.data);
 
-export const castInfo = ({mediaType, mediaId}) =>
+export const getCastInfo = ({mediaType, mediaId}) =>
   instance.get(`/${mediaType}/${mediaId}/credits`).then(res => res.data);
 
 export const getDetails = ({mediaType, mediaId}) =>

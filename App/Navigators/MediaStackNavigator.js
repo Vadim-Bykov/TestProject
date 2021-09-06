@@ -5,8 +5,10 @@ import {MediaScreen} from '../screens/Media/MediaScreen';
 import {MediaDetailsScreen} from '../screens/Media/MediaDetailsScreen';
 import {colors, Icon} from 'react-native-elements';
 import {STACK_SCREEN_OPTIONS} from '../consts/consts';
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 
 const Stack = createStackNavigator();
+// const Stack = createSharedElementStackNavigator();
 
 export const MediaStackNavigator = () => {
   return (
@@ -39,6 +41,7 @@ export const MediaStackNavigator = () => {
             />
           ),
         }}
+        // sharedElements={route => [route.params.id.toString()]}
       />
     </Stack.Navigator>
   );
