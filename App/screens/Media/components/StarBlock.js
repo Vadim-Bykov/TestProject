@@ -2,6 +2,7 @@ import React, {useLayoutEffect, useRef} from 'react';
 import {StyleSheet, Text, Animated} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {colors} from '../../../consts/consts';
+import {SaveMediaIcon} from './SaveMediaIcon';
 
 export const StarBlock = ({width, mediaDetails}) => {
   const value = useRef(new Animated.Value(0)).current;
@@ -41,8 +42,7 @@ export const StarBlock = ({width, mediaDetails}) => {
       </Animated.View>
 
       <Animated.View style={[styles.voteAverage, {transform: [{scale}]}]}>
-        <Icon type="ionicon" name="save-outline" color="blue" />
-        <Text>Save</Text>
+        <SaveMediaIcon />
       </Animated.View>
     </Animated.View>
   );

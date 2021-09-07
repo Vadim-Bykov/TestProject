@@ -21,6 +21,7 @@ import {ModeSwitch} from './components/ModeSwitch';
 import {MediaTypeToggle} from './components/MediaTypeToggle';
 import {Loader} from '../../common/Loader';
 import {Pager} from './components/Pager';
+import {Error} from '../../common/Error';
 
 // const MediaContext = createContext();
 // export const useMediaContext = () => useContext(MediaContext);

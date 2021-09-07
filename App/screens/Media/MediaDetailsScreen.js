@@ -1,21 +1,17 @@
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
-  View,
   ScrollView,
   useWindowDimensions,
-  Image,
+  Button,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import * as selectorsMedia from '../../store/media/selectors';
+import * as selectorsCommon from '../../store/common/selectors';
 import * as tmdbService from '../../api/tmdbService';
-import {useQuery} from 'react-query';
-import * as actionsCommon from '../../store/common/actions';
-import {extractErrorMessage} from '../../utils/utils';
 import {Error} from '../../common/Error';
-import {Loader} from '../../common/Loader';
 import FastImage from 'react-native-fast-image';
 import {BASE_IMAGE_URL, DEFAULT_MOVIE_IMAGE} from '../../consts/consts';
 import {SharedElement} from 'react-navigation-shared-element';
@@ -30,6 +26,7 @@ export const MediaDetailsScreen = ({navigation, route}) => {
   // const dispatch = useDispatch();
   const {id, mediaType} = route.params;
   const {width} = useWindowDimensions();
+  const error = useSelector(selectorsCommon.getError);
   const mediaData = useSelector(selectorsMedia.getMediaData);
   const allGenres = useSelector(selectorsMedia.getGenres);
   const [isTransitionEnd, setIsTransitionEnd] = useState(false);
@@ -49,32 +46,14 @@ export const MediaDetailsScreen = ({navigation, route}) => {
   const mediaDetails = mediaData.find(movie => movie.id === id);
   const title =
     mediaType === 'movie' ? mediaDetails.title : mediaDetails.original_name;
-  // console.log(mediaDetails);
 
   const currentGenres = allGenres.filter(genre =>
     mediaDetails.genre_ids.includes(genre.id),
   );
 
-  // const {data, error, isError, isLoading} = useQuery(
-  //   ['mediaDetails', id, mediaType],
-  //   () => tmdbService.getDetails({mediaId: id, mediaType}),
-  // );
-
-  // useEffect(() => {
-  //   isError &&
-  //     dispatch(
-  //       actionsCommon.setError(
-  //         extractErrorMessage(media.error.response.data.status_message),
-  //       ),
-  //     );
-  // }, [isError]);
-
-  // console.log(data);
-
   return (
     <>
-      {/* {isLoading && <Loader />} */}
-      {/* {isError && <Error />} */}
+      {error && <Error />}
 
       {/* <SafeAreaView style={styles.container}> */}
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
@@ -105,6 +84,45 @@ export const MediaDetailsScreen = ({navigation, route}) => {
         />
 
         <CastInfo id={id} mediaType={mediaType} width={width} />
+
+        <Button
+          title={'Get list'}
+          onPress={async () => {
+            try {
+              const data = await tmdbService.getList();
+
+              console.log(data);
+            } catch (error) {
+              console.log(error);
+            }
+          }}
+        />
+
+        <Button
+          title={'Add media'}
+          onPress={async () => {
+            try {
+              const data = await tmdbService.addMedia(mediaType, id);
+
+              console.log(data);
+            } catch (error) {
+              console.log(error);
+            }
+          }}
+        />
+
+        <Button
+          title={'Remove media'}
+          onPress={async () => {
+            try {
+              const data = await tmdbService.removeMedia(mediaType, id);
+
+              console.log(data);
+            } catch (error) {
+              console.log(error);
+            }
+          }}
+        />
       </ScrollView>
       {/* </SafeAreaView> */}
     </>

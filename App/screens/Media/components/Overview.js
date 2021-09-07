@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useMemo, useRef} from 'react';
-import {Animated, StyleSheet, Text, View} from 'react-native';
+import {Animated, StyleSheet} from 'react-native';
 import {SPACE} from '../MediaDetailsScreen';
 
 export const Overview = React.memo(({overviewText, isTransitionEnd, width}) => {
