@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
-import * as selectorsMedia from '../../../store/media/selectors';
-import * as selectorsCommon from '../../../store/common/selectors';
 import * as tmdbService from '../../../api/tmdbService';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import * as actionsCommon from '../../../store/common/actions';
@@ -23,9 +21,6 @@ export const SaveMediaIcon = () => {
     ['savedMediaList', page],
     () => tmdbService.getList(page),
   );
-
-  console.log(data?.results);
-  console.log('isSaved', isSaved);
 
   useEffect(() => {
     const saved = data?.results.length

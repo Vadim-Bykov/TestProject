@@ -1,11 +1,5 @@
 import React, {useCallback, useLayoutEffect, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  ScrollView,
-  useWindowDimensions,
-  Button,
-} from 'react-native';
+import {StyleSheet, Text, ScrollView, useWindowDimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import * as selectorsMedia from '../../store/media/selectors';
@@ -84,45 +78,6 @@ export const MediaDetailsScreen = ({navigation, route}) => {
         />
 
         <CastInfo id={id} mediaType={mediaType} width={width} />
-
-        <Button
-          title={'Get list'}
-          onPress={async () => {
-            try {
-              const data = await tmdbService.getList();
-
-              console.log(data);
-            } catch (error) {
-              console.log(error);
-            }
-          }}
-        />
-
-        <Button
-          title={'Add media'}
-          onPress={async () => {
-            try {
-              const data = await tmdbService.addMedia(mediaType, id);
-
-              console.log(data);
-            } catch (error) {
-              console.log(error);
-            }
-          }}
-        />
-
-        <Button
-          title={'Remove media'}
-          onPress={async () => {
-            try {
-              const data = await tmdbService.removeMedia(mediaType, id);
-
-              console.log(data);
-            } catch (error) {
-              console.log(error);
-            }
-          }}
-        />
       </ScrollView>
       {/* </SafeAreaView> */}
     </>

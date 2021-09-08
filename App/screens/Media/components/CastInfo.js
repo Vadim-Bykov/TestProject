@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {Animated, StyleSheet, View, Text} from 'react-native';
+import {Animated, StyleSheet, View, Text, Easing} from 'react-native';
 import {useQuery} from 'react-query';
 import {useDispatch} from 'react-redux';
 import * as tmdbService from '../../../api/tmdbService';
@@ -11,6 +11,22 @@ import {CastInfoItem} from './CastInfoItem';
 export const CastInfo = React.memo(({id, mediaType, width}) => {
   const dispatch = useDispatch();
   const scroll = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(-width * 2)).current;
+
+  useEffect(() => {
+    Animated.timing(translateY, {
+      toValue: 0,
+      duration: 900,
+      delay: 500,
+      // easing: Easing.bounce,
+      useNativeDriver: true,
+    }).start();
+  });
+
+  const translateX = translateY.interpolate({
+    inputRange: [-width * 2, 0],
+    outputRange: [-width, 0],
+  });
 
   const {data, error, isLoading, isError} = useQuery(
     ['castInfo', id, mediaType],
@@ -58,7 +74,8 @@ export const CastInfo = React.memo(({id, mediaType, width}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <Animated.View
+      style={[styles.container, {transform: [{translateY}, {translateX}]}]}>
       {isLoading && <Loader />}
       <Text style={styles.title}>Cast & Crew</Text>
       <Animated.FlatList
@@ -70,8 +87,9 @@ export const CastInfo = React.memo(({id, mediaType, width}) => {
         onScroll={onScroll}
         scrollEventThrottle={16}
         getItemLayout={getItemLayout}
+        decelerationRate="fast"
       />
-    </View>
+    </Animated.View>
   );
 });
 
