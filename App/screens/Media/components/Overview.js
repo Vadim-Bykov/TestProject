@@ -1,9 +1,11 @@
+import {useTheme} from '@react-navigation/native';
 import React, {useLayoutEffect, useMemo, useRef} from 'react';
 import {Animated, StyleSheet} from 'react-native';
 import {SPACE} from '../MediaDetailsScreen';
 
 export const Overview = React.memo(({overviewText, isTransitionEnd, width}) => {
   const value = useRef(new Animated.Value(0)).current;
+  const {colors} = useTheme();
 
   useLayoutEffect(() => {
     isTransitionEnd &&
@@ -27,13 +29,19 @@ export const Overview = React.memo(({overviewText, isTransitionEnd, width}) => {
   return (
     <Animated.View style={styles.container}>
       <Animated.Text
-        style={[styles.title, {transform: [{translateX: translateTitle}]}]}>
+        style={[
+          styles.title,
+          {transform: [{translateX: translateTitle}], color: colors.text},
+        ]}>
         Plot Summary
       </Animated.Text>
       <Animated.Text
         style={[
           styles.overviewText,
-          {transform: [{translateX: translateOverviewText}]},
+          {
+            transform: [{translateX: translateOverviewText}],
+            color: colors.text,
+          },
         ]}>
         {overviewText}
       </Animated.Text>

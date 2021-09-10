@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {Modal, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
-import {colors} from '../consts/consts';
+import {COLORS} from '../consts/consts';
 import * as actionsCommon from '../store/common/actions';
 import * as selectorsCommon from '../store/common/selectors';
 
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: colors.WHITE,
+    backgroundColor: COLORS.WHITE,
     paddingHorizontal: 15,
     paddingVertical: 10,
     margin: 20,

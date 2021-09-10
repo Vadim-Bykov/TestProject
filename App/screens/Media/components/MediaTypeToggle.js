@@ -1,11 +1,12 @@
 import React from 'react';
-import {StyleSheet, Switch, Text, View} from 'react-native';
+import {StyleSheet, Switch, View, Text} from 'react-native';
 import {colors} from 'react-native-elements';
+import {ThemeText} from '../../../common/ThemeText';
 
 export const MediaTypeToggle = ({mediaType, toggleMediaType}) => {
   return (
     <View style={styles.toggleContainer}>
-      <Text>Movies</Text>
+      <ThemeText>Movies</ThemeText>
       <Switch
         style={styles.switch}
         value={mediaType === 'tv'}
@@ -14,7 +15,7 @@ export const MediaTypeToggle = ({mediaType, toggleMediaType}) => {
         ios_backgroundColor={colors.primary}
         thumbColor={colors.warning}
       />
-      <Text>TV</Text>
+      <ThemeText>TV</ThemeText>
     </View>
   );
 };

@@ -8,13 +8,15 @@ import * as selectors from '../store/auth/selectors';
 import {TabNavigator} from './TabNavigator';
 import {StatusBar} from 'react-native';
 import {AuthStackNavigator} from './AuthStackNavigator';
-import {colors, STACK_SCREEN_OPTIONS} from '../consts/consts';
+import {STACK_SCREEN_OPTIONS} from '../consts/consts';
+import {useTheme} from '@react-navigation/native';
 
 const Stack = createStackNavigator();
 
 export const MainStackNavigator = () => {
   const [initializing, setInitializing] = useState(true);
   const isAuth = useSelector(selectors.getIsAuth);
+  const {colors, dark} = useTheme();
 
   const dispatch = useDispatch();
 
@@ -39,8 +41,8 @@ export const MainStackNavigator = () => {
     <>
       <StatusBar
         translucent
-        backgroundColor={!isAuth ? 'transparent' : colors.BLACK}
-        barStyle={!isAuth ? 'dark-content' : 'default'}
+        backgroundColor={'transparent'}
+        barStyle={!isAuth || !dark ? 'dark-content' : 'light-content'}
       />
 
       <Stack.Navigator

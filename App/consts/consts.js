@@ -20,10 +20,40 @@ export const STACK_SCREEN_OPTIONS = {
   gestureDirection: 'horizontal',
 };
 
-export const colors = {
+export const COLORS = {
   BLACK: '#000000',
   WHITE: '#ffffff',
   BG_TRANSPARENT_GRAY: 'rgba(0,0,0, 0.4)',
   DARK_YELLOW: '#DDBA33',
   BLUE: '#1F80D3',
+};
+
+export const COLORS_LIGHT_THEME = {
+  dark: false,
+  colors: {
+    primary: 'rgb(0, 122, 255)',
+    background: 'rgb(242, 242, 242)',
+    border: 'rgb(216, 216, 216)',
+    card: 'rgb(255, 255, 255)',
+    notification: 'rgb(255, 59, 48)',
+    text: 'rgb(28, 28, 30)',
+    textGray: '#6A6A6A',
+    backgroundGray: '#EBEBEB',
+    // backgroundBlue: '#CDE6FF',
+  },
+};
+
+export const COLORS_DARK_THEME = {
+  dark: true,
+  colors: {
+    primary: 'rgb(10, 132, 255)',
+    background: 'rgb(1, 1, 1)',
+    border: 'rgb(39, 39, 41)',
+    card: 'rgb(18, 18, 18)',
+    notification: 'rgb(255, 69, 58)',
+    text: 'rgb(229, 229, 231)',
+    textGray: '#A1A1A1',
+    backgroundGray: '#BFBFBF',
+    // backgroundBlue: '#ABD2FF',
+  },
 };

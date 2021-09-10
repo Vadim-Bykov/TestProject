@@ -1,7 +1,9 @@
+import {useTheme} from '@react-navigation/native';
 import React, {useRef} from 'react';
 import {useLayoutEffect} from 'react';
 import {Animated, StyleSheet, Text, View} from 'react-native';
-import {colors} from '../../../consts/consts';
+import {ThemeText} from '../../../common/ThemeText';
+import {COLORS} from '../../../consts/consts';
 import {SPACE} from '../MediaDetailsScreen';
 
 export const DetailsPageGenres = ({currentGenres, isTransitionEnd}) => {
@@ -9,6 +11,7 @@ export const DetailsPageGenres = ({currentGenres, isTransitionEnd}) => {
 
   const genres = currentGenres.map((genre, index) => {
     const scale = useRef(new Animated.Value(0)).current;
+    const {colors} = useTheme();
 
     useLayoutEffect(() => {
       isTransitionEnd &&
@@ -22,8 +25,11 @@ export const DetailsPageGenres = ({currentGenres, isTransitionEnd}) => {
     return (
       <Animated.View
         key={genre.id}
-        style={[styles.genre, {transform: [{scale}]}]}>
-        <Text>{genre.name}</Text>
+        style={[
+          styles.genre,
+          {transform: [{scale}], borderColor: colors.text},
+        ]}>
+        <ThemeText>{genre.name}</ThemeText>
       </Animated.View>
     );
   });
@@ -45,6 +51,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.BLACK,
   },
 });

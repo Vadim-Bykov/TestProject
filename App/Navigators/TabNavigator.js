@@ -12,6 +12,9 @@ import {
 } from 'react-native';
 import {ProfileStackNavigator} from './ProfileStackNavigator';
 import {MediaStackNavigator} from './MediaStackNavigator';
+// import {DrawerNavigator} from './DrawerNavigator';
+import {Settings} from '../screens/Settings/Settings';
+import {useTheme} from '@react-navigation/native';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -38,6 +41,8 @@ const MyText = ({children, color}) => {
 };
 
 export const TabNavigator = () => {
+  const {colors} = useTheme();
+
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -47,22 +52,23 @@ export const TabNavigator = () => {
 
           if (route.name === 'HomeTab') {
             type = 'ionicon';
-            iconName = focused
-              ? 'ios-information-circle'
-              : 'ios-information-circle-outline';
+            iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'MoviesTab') {
             type = 'ionicon';
             iconName = focused ? 'ios-list' : 'ios-list-outline';
           } else if (route.name === 'ProfileTab') {
             type = 'font-awesome';
             iconName = focused ? 'user-circle-o' : 'user';
+          } else if (route.name === 'SettingsTab') {
+            type = 'ionicon';
+            iconName = focused ? 'settings' : 'settings-outline';
           }
 
           return <Icon type={type} name={iconName} size={size} color={color} />;
         },
         headerShown: false,
         tabBarActiveTintColor: 'tomato',
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: colors.textGray,
         tabBarLabel: ({focused, color}) => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
           switch (route.name) {
@@ -75,6 +81,9 @@ export const TabNavigator = () => {
             case 'ProfileTab':
               return focused && <MyText color={color}>Profile</MyText>;
 
+            case 'SettingsTab':
+              return focused && <MyText color={color}>Settings</MyText>;
+
             default:
               null;
           }
@@ -83,6 +92,7 @@ export const TabNavigator = () => {
       <Tab.Screen name="HomeTab" component={HomeStackNavigator} />
       <Tab.Screen name="ProfileTab" component={ProfileStackNavigator} />
       <Tab.Screen name="MoviesTab" component={MediaStackNavigator} />
+      <Tab.Screen name="SettingsTab" component={Settings} />
     </Tab.Navigator>
   );
 };

@@ -13,6 +13,7 @@ import {StarBlock} from './components/StarBlock';
 import {DetailsPageGenres} from './components/DetailsPageGenres';
 import {Overview} from './components/Overview';
 import {CastInfo} from './components/CastInfo';
+import {ThemeText} from '../../common/ThemeText';
 
 export const SPACE = 15;
 
@@ -64,7 +65,7 @@ export const MediaDetailsScreen = ({navigation, route}) => {
 
         <StarBlock width={width} mediaDetails={mediaDetails} />
 
-        <Text style={styles.title}>{title}</Text>
+        <ThemeText style={styles.title}>{title}</ThemeText>
 
         <DetailsPageGenres
           currentGenres={currentGenres}

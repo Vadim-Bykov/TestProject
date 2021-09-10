@@ -1,11 +1,14 @@
+import {useTheme} from '@react-navigation/native';
 import React, {useCallback, useRef} from 'react';
 import {StyleSheet, Text, TouchableOpacity, Animated} from 'react-native';
-import {colors} from '../../../consts/consts';
+import {COLORS} from '../../../consts/consts';
 
 export const Genre = ({genre, isActive, onSetGenre, mode}) => {
   const onPress = useCallback(() => {
     mode === 'genre' && onSetGenre(genre.id);
   }, [mode]);
+
+  const {colors} = useTheme();
 
   const value = useRef(new Animated.Value(0)).current;
 
@@ -31,14 +34,17 @@ export const Genre = ({genre, isActive, onSetGenre, mode}) => {
       style={styles.genreContainer}
       activeOpacity={0.6}
       onPress={onPress}>
-      <Animated.View style={[styles.genreBlock]}>
+      <Animated.View style={[styles.genreBlock, {borderColor: colors.text}]}>
         <Animated.View
           style={[
             styles.internalBackGround,
             {opacity: mode === 'genre' ? value : 0},
           ]}
         />
-        <Text>{genre.name}</Text>
+        <Text
+          style={{color: mode === 'genre' && isActive ? 'red' : colors.text}}>
+          {genre.name}
+        </Text>
       </Animated.View>
       <Animated.View
         style={[
@@ -59,7 +65,7 @@ const styles = StyleSheet.create({
   genreBlock: {
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: colors.BLACK,
+    borderColor: COLORS.BLACK,
     paddingVertical: 5,
     paddingHorizontal: 10,
     marginBottom: 5,
@@ -73,7 +79,7 @@ const styles = StyleSheet.create({
   },
 
   dash: {
-    borderBottomColor: colors.BLUE,
+    borderBottomColor: COLORS.BLUE,
     borderBottomWidth: 3,
     marginLeft: 5,
     width: '60%',

@@ -4,6 +4,7 @@ import {useQuery} from 'react-query';
 import {useDispatch} from 'react-redux';
 import * as tmdbService from '../../../api/tmdbService';
 import {Loader} from '../../../common/Loader';
+import {ThemeText} from '../../../common/ThemeText';
 import * as actionsCommon from '../../../store/common/actions';
 import {SPACE} from '../MediaDetailsScreen';
 import {CastInfoItem} from './CastInfoItem';
@@ -77,7 +78,7 @@ export const CastInfo = React.memo(({id, mediaType, width}) => {
     <Animated.View
       style={[styles.container, {transform: [{translateY}, {translateX}]}]}>
       {isLoading && <Loader />}
-      <Text style={styles.title}>Cast & Crew</Text>
+      <ThemeText style={styles.title}>Cast & Crew</ThemeText>
       <Animated.FlatList
         data={data?.cast}
         horizontal
@@ -87,7 +88,7 @@ export const CastInfo = React.memo(({id, mediaType, width}) => {
         onScroll={onScroll}
         scrollEventThrottle={16}
         getItemLayout={getItemLayout}
-        decelerationRate="fast"
+        decelerationRate="normal"
       />
     </Animated.View>
   );

@@ -1,12 +1,14 @@
+import {useTheme} from '@react-navigation/native';
 import React, {useLayoutEffect, useRef} from 'react';
 import {StyleSheet, Text, Animated} from 'react-native';
 import {Icon} from 'react-native-elements';
-import {colors} from '../../../consts/consts';
+import {COLORS} from '../../../consts/consts';
 import {SaveMediaIcon} from './SaveMediaIcon';
 
 export const StarBlock = ({width, mediaDetails}) => {
   const value = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(0)).current;
+  const {colors} = useTheme();
 
   const inputRange = [0, 100];
 
@@ -29,7 +31,15 @@ export const StarBlock = ({width, mediaDetails}) => {
   });
 
   return (
-    <Animated.View style={[styles.starContainer, {transform: [{translateX}]}]}>
+    <Animated.View
+      style={[
+        styles.starContainer,
+        {
+          transform: [{translateX}],
+          backgroundColor: colors.backgroundGray,
+          shadowColor: colors.text,
+        },
+      ]}>
       <Animated.View style={[styles.voteAverage, {transform: [{scale}]}]}>
         <Icon type="antdesign" name="star" color="gold" />
         <Text>{mediaDetails.vote_average}</Text>
@@ -61,11 +71,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
 
-    backgroundColor: colors.WHITE,
+    // backgroundColor: COLORS.WHITE,
     elevation: 10,
 
     shadowOpacity: 0.3,
-    shadowColor: colors.BLACK,
+    // shadowColor: COLORS.BLACK,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -84,6 +94,6 @@ const styles = StyleSheet.create({
   },
 
   popularityText: {
-    color: colors.WHITE,
+    color: COLORS.WHITE,
   },
 });

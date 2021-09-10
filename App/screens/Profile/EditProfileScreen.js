@@ -15,11 +15,11 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import {Button, Avatar, Icon} from 'react-native-elements';
+import {Button, Icon} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {CustomInput} from '../../common/CustomInput';
-import {colors, DEFAULT_AVATAR} from '../../consts/consts';
+import {COLORS, DEFAULT_AVATAR} from '../../consts/consts';
 import * as selectorsAuth from '../../store/auth/selectors';
 import * as firebaseService from '../../api/firebaseService';
 import * as selectorsCommon from '../../store/common/selectors';
@@ -27,6 +27,7 @@ import {Loader} from '../../common/Loader';
 import {Error} from '../../common/Error';
 import {UserImage} from '../Auth/components/UserImage';
 import FastImage from 'react-native-fast-image';
+import {useTheme} from '@react-navigation/native';
 
 if (
   Platform.OS === 'android' &&
@@ -44,6 +45,7 @@ export const EditProfileScreen = ({navigation}) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [imageData, setImageData] = useState(null);
   const dispatch = useDispatch();
+  const {colors} = useTheme();
 
   const {control, handleSubmit, reset, unregister, setValue} = useForm({
     defaultValues: {
@@ -78,7 +80,7 @@ export const EditProfileScreen = ({navigation}) => {
 
   const userNameConfig = useMemo(
     () => ({
-      leftIcon: {iconName: 'user', type: 'font-awesome', color: colors.BLUE},
+      leftIcon: {iconName: 'user', type: 'font-awesome', color: COLORS.BLUE},
       width,
       placeholder: userData?.displayName
         ? `Current name: ${userData?.displayName}`
@@ -91,18 +93,18 @@ export const EditProfileScreen = ({navigation}) => {
       },
       label: 'Your name',
       // defaultValue: userData?.displayName,
-      borderColor: colors.BLUE,
-      textColor: colors.BLACK,
+      borderColor: COLORS.BLUE,
+      textColor: colors.text,
     }),
     [userData, width],
   );
 
   const currentEmailConfig = useMemo(
     () => ({
-      leftIcon: {iconName: 'email', color: colors.BLUE},
+      leftIcon: {iconName: 'email', color: COLORS.BLUE},
       rightIcon: {
         rightIconName: isAdditionalInputs ? 'close' : 'edit',
-        rightIconColor: colors.BLUE,
+        rightIconColor: COLORS.BLUE,
         onPress: () => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
           setIsAdditionalInputs(prev => !prev);
@@ -114,8 +116,8 @@ export const EditProfileScreen = ({navigation}) => {
       name: 'currentEmail',
       label: 'Email',
       // defaultValue: userData?.email,
-      borderColor: colors.BLUE,
-      textColor: colors.BLACK,
+      borderColor: COLORS.BLUE,
+      textColor: colors.text,
       editable: false,
     }),
     [userData, width, isAdditionalInputs],
@@ -123,7 +125,7 @@ export const EditProfileScreen = ({navigation}) => {
 
   const newEmailConfig = useMemo(
     () => ({
-      leftIcon: {iconName: 'email', color: colors.BLUE},
+      leftIcon: {iconName: 'email', color: COLORS.BLUE},
       width,
       placeholder: 'Enter new email address',
       control,
@@ -135,21 +137,21 @@ export const EditProfileScreen = ({navigation}) => {
           }
         : null,
       label: 'New email',
-      borderColor: colors.BLUE,
-      textColor: colors.BLACK,
+      borderColor: COLORS.BLUE,
+      textColor: colors.text,
     }),
     [userData, width, isAdditionalInputs],
   );
 
   const passwordConfig = useMemo(
     () => ({
-      leftIcon: {iconName: 'lock', color: colors.BLUE},
+      leftIcon: {iconName: 'lock', color: COLORS.BLUE},
       rightIcon: {
         rightIconName: secureTextEntry
           ? 'eye-check-outline'
           : 'eye-off-outline',
         rightIconType: 'material-community',
-        rightIconColor: colors.BLUE,
+        rightIconColor: COLORS.BLUE,
         onPress: () => setSecureTextEntry(prev => !prev),
       },
       width,
@@ -166,15 +168,15 @@ export const EditProfileScreen = ({navigation}) => {
           }
         : null,
       label: 'Password',
-      borderColor: colors.BLUE,
-      textColor: colors.BLACK,
+      borderColor: COLORS.BLUE,
+      textColor: colors.text,
     }),
     [secureTextEntry, width, isAdditionalInputs],
   );
 
   const photoUrlConfig = useMemo(
     () => ({
-      leftIcon: {iconName: 'photo-camera', color: colors.BLUE},
+      leftIcon: {iconName: 'photo-camera', color: COLORS.BLUE},
       width: width * 0.86,
       multiline: true,
       placeholder: userData?.photoURL
@@ -184,8 +186,8 @@ export const EditProfileScreen = ({navigation}) => {
       name: 'photoURL',
       label: 'Photo url',
       // defaultValue: userData?.photoURL,
-      borderColor: colors.BLUE,
-      textColor: colors.BLACK,
+      borderColor: COLORS.BLUE,
+      textColor: colors.text,
     }),
     [userData, width],
   );
@@ -245,7 +247,7 @@ export const EditProfileScreen = ({navigation}) => {
                 type="feather"
                 name="delete"
                 onPress={resetPhotoUrl}
-                color={colors.BLUE}
+                color={COLORS.BLUE}
               />
             </View>
           </View>

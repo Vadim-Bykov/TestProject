@@ -5,7 +5,7 @@ import {FAB} from 'react-native-elements/dist/buttons/FAB';
 import FastImage from 'react-native-fast-image';
 import {
   BASE_IMAGE_URL,
-  colors,
+  COLORS,
   DEFAULT_MOVIE_IMAGE,
 } from '../../../consts/consts';
 import {useAnimated} from '../hooks/useAnimated';
@@ -13,6 +13,8 @@ import * as selectorsMedia from '../../../store/media/selectors';
 import {useDispatch, useSelector} from 'react-redux';
 import * as actionsMedia from '../../../store/media/actions';
 import {SharedElement} from 'react-navigation-shared-element';
+import {ThemeText} from '../../../common/ThemeText';
+import {useTheme} from '@react-navigation/native';
 
 const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
 
@@ -39,8 +41,8 @@ export const Slide = React.memo(
 
     const page = useSelector(selectorsMedia.getPage);
     const totalPages = useSelector(selectorsMedia.getTotalPages);
-
     const dispatch = useDispatch();
+    const {colors} = useTheme();
 
     const goToNextPage = useCallback(() => {
       dispatch(
@@ -60,7 +62,7 @@ export const Slide = React.memo(
           <Icon
             type="ionicon"
             name="ios-arrow-undo"
-            color={colors.BLUE}
+            color={COLORS.BLUE}
             size={32}
             containerStyle={[styles.arrowLeft, {top: width / 2}]}
             onPress={goToPrevPage}
@@ -73,7 +75,7 @@ export const Slide = React.memo(
               width: width * 0.8,
               marginLeft: index === 0 ? width * 0.1 : 0,
               marginRight: index === lastIndex ? width * 0.1 : 0,
-
+              shadowColor: colors.text,
               shadowOpacity: shadowOpacity,
               transform: [{scale}, {translateX}],
             },
@@ -90,7 +92,7 @@ export const Slide = React.memo(
               {
                 width: width * 0.75,
                 height: width,
-                // elevation,
+                elevation,
               },
             ]}>
             <FAB
@@ -103,10 +105,10 @@ export const Slide = React.memo(
           {/* </SharedElement> */}
 
           <Animated.View style={[styles.infoBlock, {opacity}]}>
-            <Text style={styles.title}>{title}</Text>
+            <ThemeText style={styles.title}>{title}</ThemeText>
             <View style={styles.voteAverageBlock}>
               <Icon name="star" color="gold" />
-              <Text>{voteAverage}</Text>
+              <ThemeText>{voteAverage}</ThemeText>
             </View>
           </Animated.View>
         </Animated.View>
@@ -115,7 +117,7 @@ export const Slide = React.memo(
           <Icon
             type="ionicon"
             name="ios-arrow-redo"
-            color={colors.BLUE}
+            color={COLORS.BLUE}
             size={32}
             containerStyle={[styles.arrowRight, {top: width / 2}]}
             onPress={goToNextPage}
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
   slideContainer: {
     alignItems: 'center',
     marginBottom: 10,
-    shadowColor: colors.BLACK,
+    shadowColor: COLORS.BLACK,
     shadowOffset: {
       width: 0,
       height: 4,

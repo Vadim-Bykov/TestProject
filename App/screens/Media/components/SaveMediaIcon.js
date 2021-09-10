@@ -7,7 +7,7 @@ import {useMutation, useQuery, useQueryClient} from 'react-query';
 import * as actionsCommon from '../../../store/common/actions';
 import {useRoute} from '@react-navigation/native';
 import {extractErrorMessage} from '../../../utils/utils';
-import {colors} from '../../../consts/consts';
+import {COLORS} from '../../../consts/consts';
 
 export const SaveMediaIcon = () => {
   const dispatch = useDispatch();
@@ -93,6 +93,6 @@ export const SaveMediaIcon = () => {
 
 const styles = StyleSheet.create({
   disabledStyle: {
-    backgroundColor: colors.BG_TRANSPARENT_GRAY,
+    backgroundColor: COLORS.BG_TRANSPARENT_GRAY,
   },
 });

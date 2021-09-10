@@ -13,9 +13,10 @@ import * as firebaseService from '../../api/firebaseService';
 import {useDispatch, useSelector} from 'react-redux';
 import * as selectorsAuth from '../../store/auth/selectors';
 import * as selectorsCommon from '../../store/common/selectors';
-import {colors} from '../../consts/consts';
 import {Loader} from '../../common/Loader';
 import {Error} from '../../common/Error';
+import {ThemeText} from '../../common/ThemeText';
+import {useTheme} from '@react-navigation/native';
 
 export const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ export const HomeScreen = () => {
   const userData = useSelector(selectorsAuth.getUserData);
   const isFetching = useSelector(selectorsCommon.getIsFetching);
   const error = useSelector(selectorsCommon.getError);
+  const {colors} = useTheme();
 
   const logout = useCallback(() => dispatch(firebaseService.logout()), []);
 
@@ -39,8 +41,10 @@ export const HomeScreen = () => {
           decelerationRate="fast"
           showsVerticalScrollIndicator={false}>
           <>
-            <Text style={styles.item}>Welcome {userData.email}</Text>
-            <Text style={styles.item}>Welcome {userData.displayName}</Text>
+            <ThemeText style={styles.item}>Welcome {userData.email}</ThemeText>
+            <ThemeText style={styles.item}>
+              Welcome {userData.displayName}
+            </ThemeText>
             {userData.photoURL && (
               <Avatar source={{uri: userData.photoURL}} rounded size={100} />
             )}
@@ -49,10 +53,14 @@ export const HomeScreen = () => {
               activeOpacity={0.6}
               title="Logout"
               type="outline"
-              icon={{type: 'ionicon', name: 'ios-log-out-outline'}}
+              icon={{
+                type: 'ionicon',
+                name: 'ios-log-out-outline',
+                color: colors.text,
+              }}
               iconRight
-              buttonStyle={{paddingRight: 15, borderColor: colors.BLACK}}
-              titleStyle={{color: colors.BLACK}}
+              buttonStyle={{paddingRight: 15, borderColor: colors.text}}
+              titleStyle={{color: colors.text}}
               onPress={logout}
             />
           </>

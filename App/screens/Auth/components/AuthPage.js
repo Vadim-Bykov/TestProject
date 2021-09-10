@@ -16,12 +16,12 @@ import {CustomInput} from '../../../common/CustomInput';
 import {Button} from 'react-native-elements';
 import * as firebaseService from '../../../api/firebaseService';
 import {useDispatch, useSelector} from 'react-redux';
-import {colors} from '../../../consts/consts';
 import * as selectorsCommon from '../../../store/common/selectors';
 import {Loader} from '../../../common/Loader';
 import {Error} from '../../../common/Error';
 import FastImage from 'react-native-fast-image';
 import {UserImage} from './UserImage';
+import {COLORS} from '../../../consts/consts';
 
 export const AuthPage = ({isSignUp, redirectTo}) => {
   const {width} = useWindowDimensions();
@@ -177,11 +177,11 @@ export const AuthPage = ({isSignUp, redirectTo}) => {
                 icon={{
                   type: 'antdesign',
                   name: 'enter',
-                  color: colors.DARK_YELLOW,
+                  color: COLORS.DARK_YELLOW,
                 }}
                 iconRight
                 buttonStyle={styles.button}
-                titleStyle={{color: colors.DARK_YELLOW}}
+                titleStyle={{color: COLORS.DARK_YELLOW}}
                 onPress={handleSubmit(onSubmit)}
               />
 
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: colors.BG_TRANSPARENT_GRAY,
+    backgroundColor: COLORS.BG_TRANSPARENT_GRAY,
   },
 
   scrollViewContainer: {
@@ -234,9 +234,9 @@ const styles = StyleSheet.create({
   button: {
     paddingRight: 15,
     borderWidth: 1,
-    borderColor: colors.DARK_YELLOW,
+    borderColor: COLORS.DARK_YELLOW,
     borderRadius: 15,
-    // backgroundColor: colors.DARK_YELLOW,
+    // backgroundColor: COLORS.DARK_YELLOW,
   },
 
   redirectContainer: {
@@ -252,6 +252,6 @@ const styles = StyleSheet.create({
   },
 
   redirectText: {
-    color: colors.WHITE,
+    color: COLORS.WHITE,
   },
 });

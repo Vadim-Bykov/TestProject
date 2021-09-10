@@ -1,6 +1,7 @@
 import React, {useLayoutEffect, useRef} from 'react';
 import {Animated, StyleSheet, Text} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {ThemeText} from '../../../common/ThemeText';
 import {BASE_IMAGE_URL, DEFAULT_AVATAR} from '../../../consts/consts';
 
 export const CastInfoItem = ({
@@ -112,7 +113,7 @@ export const CastInfoItem = ({
           borderRadius: (ITEM_WIDTH * 0.8) / 2,
         }}
       />
-      <Text style={styles.name}>{profileName}</Text>
+      <ThemeText style={styles.name}>{profileName}</ThemeText>
     </Animated.View>
   );
 };
