@@ -4,19 +4,22 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
 import {SplashScreen} from '../screens/Splash/SplashScreen';
 import * as actionsAuth from '../store/auth/actions';
-import * as selectors from '../store/auth/selectors';
+import * as selectorsAuth from '../store/auth/selectors';
 import {TabNavigator} from './TabNavigator';
 import {StatusBar} from 'react-native';
 import {AuthStackNavigator} from './AuthStackNavigator';
 import {STACK_SCREEN_OPTIONS} from '../consts/consts';
 import {useTheme} from '@react-navigation/native';
+import * as selectorsCommon from '../store/common/selectors';
+import {Error} from '../common/Error';
 
 const Stack = createStackNavigator();
 
 export const MainStackNavigator = () => {
   const [initializing, setInitializing] = useState(true);
-  const isAuth = useSelector(selectors.getIsAuth);
-  const {colors, dark} = useTheme();
+  const isAuth = useSelector(selectorsAuth.getIsAuth);
+  const {dark} = useTheme();
+  const error = useSelector(selectorsCommon.getError);
 
   const dispatch = useDispatch();
 
@@ -39,6 +42,7 @@ export const MainStackNavigator = () => {
 
   return (
     <>
+      {error && <Error />}
       <StatusBar
         translucent
         backgroundColor={'transparent'}

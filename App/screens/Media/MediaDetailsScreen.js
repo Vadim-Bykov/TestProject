@@ -3,7 +3,6 @@ import {StyleSheet, Text, ScrollView, useWindowDimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import * as selectorsMedia from '../../store/media/selectors';
-import * as selectorsCommon from '../../store/common/selectors';
 import * as tmdbService from '../../api/tmdbService';
 import {Error} from '../../common/Error';
 import FastImage from 'react-native-fast-image';
@@ -21,7 +20,6 @@ export const MediaDetailsScreen = ({navigation, route}) => {
   // const dispatch = useDispatch();
   const {id, mediaType} = route.params;
   const {width} = useWindowDimensions();
-  const error = useSelector(selectorsCommon.getError);
   const mediaData = useSelector(selectorsMedia.getMediaData);
   const allGenres = useSelector(selectorsMedia.getGenres);
   const [isTransitionEnd, setIsTransitionEnd] = useState(false);
@@ -48,8 +46,6 @@ export const MediaDetailsScreen = ({navigation, route}) => {
 
   return (
     <>
-      {error && <Error />}
-
       {/* <SafeAreaView style={styles.container}> */}
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         {/* <SharedElement id={id.toString()}> */}

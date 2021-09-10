@@ -14,7 +14,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import * as selectorsAuth from '../../store/auth/selectors';
 import * as selectorsCommon from '../../store/common/selectors';
 import {Loader} from '../../common/Loader';
-import {Error} from '../../common/Error';
 import {ThemeText} from '../../common/ThemeText';
 import {useTheme} from '@react-navigation/native';
 
@@ -23,7 +22,6 @@ export const HomeScreen = () => {
 
   const userData = useSelector(selectorsAuth.getUserData);
   const isFetching = useSelector(selectorsCommon.getIsFetching);
-  const error = useSelector(selectorsCommon.getError);
   const {colors} = useTheme();
 
   const logout = useCallback(() => dispatch(firebaseService.logout()), []);
@@ -33,7 +31,6 @@ export const HomeScreen = () => {
   return (
     <>
       {isFetching && <Loader />}
-      {error && <Error />}
 
       <SafeAreaView style={styles.container}>
         <ScrollView

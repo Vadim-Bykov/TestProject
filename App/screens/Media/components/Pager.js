@@ -71,7 +71,7 @@ export const Pager = React.memo(({mediaType, goToDetails}) => {
       // pagingEnabled
       // disableIntervalMomentum
       snapToInterval={itemWidth}
-      decelerationRate="fast"
+      decelerationRate={0.88}
       // viewabilityConfig={{viewAreaCoveragePercentThreshold: 50}}
       // onViewableItemsChanged={onViewableItemsChanged}
       // extraData={activeIndex}

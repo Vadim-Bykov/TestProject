@@ -14,14 +14,12 @@ import * as tmdbService from '../../api/tmdbService';
 import * as actionsMedia from '../../store/media/actions';
 import * as actionsCommon from '../../store/common/actions';
 import * as selectorsMedia from '../../store/media/selectors';
-import * as selectorsCommon from '../../store/common/selectors';
 import {Genres} from './components/Genres';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ModeSwitch} from './components/ModeSwitch';
 import {MediaTypeToggle} from './components/MediaTypeToggle';
 import {Loader} from '../../common/Loader';
 import {Pager} from './components/Pager';
-import {Error} from '../../common/Error';
 
 // const MediaContext = createContext();
 // export const useMediaContext = () => useContext(MediaContext);
@@ -37,7 +35,6 @@ export const MediaScreen = ({navigation}) => {
   const timeWindow = useSelector(selectorsMedia.getTimeWindow);
   const page = useSelector(selectorsMedia.getPage);
   const activeGenre = useSelector(selectorsMedia.getActiveGenre);
-  const error = useSelector(selectorsCommon.getError);
 
   const dispatch = useDispatch();
 
@@ -136,7 +133,6 @@ export const MediaScreen = ({navigation}) => {
 
   return (
     <>
-      {error && <Error />}
       {isLoader && <Loader />}
 
       <SafeAreaView style={styles.container}>
@@ -149,11 +145,7 @@ export const MediaScreen = ({navigation}) => {
             toggleMediaType={toggleMediaType}
           />
 
-          <Pager
-            mediaType={mediaType}
-            goToDetails={goToDetails}
-            // mediaDate={media.data?.results}
-          />
+          <Pager mediaType={mediaType} goToDetails={goToDetails} />
         </ScrollView>
       </SafeAreaView>
     </>

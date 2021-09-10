@@ -9,14 +9,12 @@ import * as selectorsAuth from '../../store/auth/selectors';
 import * as selectorsCommon from '../../store/common/selectors';
 import * as firebaseService from '../../api/firebaseService';
 import {Loader} from '../../common/Loader';
-import {Error} from '../../common/Error';
 import {ThemeText} from '../../common/ThemeText';
 
 export const ProfileScreen = ({navigation}) => {
   const userData = useSelector(selectorsAuth.getUserData);
   const {width} = useWindowDimensions();
   const isFetching = useSelector(selectorsCommon.getIsFetching);
-  const error = useSelector(selectorsCommon.getError);
   const dispatch = useDispatch();
 
   const logout = useCallback(() => dispatch(firebaseService.logout()), []);
@@ -26,7 +24,6 @@ export const ProfileScreen = ({navigation}) => {
   return (
     <>
       {isFetching && <Loader />}
-      {error && <Error />}
 
       <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollViewContainer}>

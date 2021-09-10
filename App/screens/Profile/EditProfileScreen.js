@@ -24,7 +24,6 @@ import * as selectorsAuth from '../../store/auth/selectors';
 import * as firebaseService from '../../api/firebaseService';
 import * as selectorsCommon from '../../store/common/selectors';
 import {Loader} from '../../common/Loader';
-import {Error} from '../../common/Error';
 import {UserImage} from '../Auth/components/UserImage';
 import FastImage from 'react-native-fast-image';
 import {useTheme} from '@react-navigation/native';
@@ -39,7 +38,6 @@ if (
 export const EditProfileScreen = ({navigation}) => {
   const userData = useSelector(selectorsAuth.getUserData);
   const isFetching = useSelector(selectorsCommon.getIsFetching);
-  const error = useSelector(selectorsCommon.getError);
   const {width} = useWindowDimensions();
   const [isAdditionalInputs, setIsAdditionalInputs] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
@@ -226,7 +224,6 @@ export const EditProfileScreen = ({navigation}) => {
   return (
     <>
       {isFetching && <Loader />}
-      {error && <Error />}
 
       <SafeAreaView>
         <ScrollView contentContainerStyle={styles.scrollViewContainer}>

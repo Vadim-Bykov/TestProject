@@ -15,6 +15,7 @@ import {MediaStackNavigator} from './MediaStackNavigator';
 // import {DrawerNavigator} from './DrawerNavigator';
 import {Settings} from '../screens/Settings/Settings';
 import {useTheme} from '@react-navigation/native';
+import {SavedMediaScreen} from '../screens/SavedMedia/SavedMediaScreen';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -62,6 +63,9 @@ export const TabNavigator = () => {
           } else if (route.name === 'SettingsTab') {
             type = 'ionicon';
             iconName = focused ? 'settings' : 'settings-outline';
+          } else if (route.name === 'SavedMediaTab') {
+            type = 'ionicon';
+            iconName = focused ? 'save' : 'save-outline';
           }
 
           return <Icon type={type} name={iconName} size={size} color={color} />;
@@ -84,6 +88,9 @@ export const TabNavigator = () => {
             case 'SettingsTab':
               return focused && <MyText color={color}>Settings</MyText>;
 
+            case 'SavedMediaTab':
+              return focused && <MyText color={color}>Saved</MyText>;
+
             default:
               null;
           }
@@ -92,6 +99,7 @@ export const TabNavigator = () => {
       <Tab.Screen name="HomeTab" component={HomeStackNavigator} />
       <Tab.Screen name="ProfileTab" component={ProfileStackNavigator} />
       <Tab.Screen name="MoviesTab" component={MediaStackNavigator} />
+      <Tab.Screen name="SavedMediaTab" component={SavedMediaScreen} />
       <Tab.Screen name="SettingsTab" component={Settings} />
     </Tab.Navigator>
   );

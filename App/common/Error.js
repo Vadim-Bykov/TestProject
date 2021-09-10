@@ -1,3 +1,4 @@
+import {useTheme} from '@react-navigation/native';
 import React, {useCallback} from 'react';
 import {Modal, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import {Icon} from 'react-native-elements';
@@ -10,6 +11,7 @@ export const Error = () => {
   const error = useSelector(selectorsCommon.getError);
   const dispatch = useDispatch();
   const {width} = useWindowDimensions();
+  const {colors} = useTheme();
 
   const onClose = useCallback(() => {
     dispatch(actionsCommon.setError(null));
@@ -22,7 +24,11 @@ export const Error = () => {
       animationType="slide"
       onRequestClose={onClose}>
       <View style={styles.centeredView}>
-        <View style={[styles.modalView, {width: width * 0.8}]}>
+        <View
+          style={[
+            styles.modalView,
+            {width: width * 0.8, shadowColor: colors.text},
+          ]}>
           <Icon type="material" name="error" color="red" size={28} />
           <Text style={styles.modalText}>{error}</Text>
           <Icon
@@ -54,9 +60,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     margin: 20,
-    borderWidth: StyleSheet.hairlineWidth,
+    // borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 20,
-    shadowColor: '#000',
+    // shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
