@@ -11,3 +11,10 @@ export const extractErrorMessage = error => {
   }
   return errorMessage;
 };
+
+export const reverseData = data => {
+  if (Array.isArray(data) && data.length) {
+    const newData = [...data];
+    return newData.reverse();
+  } else return null;
+};

@@ -23,9 +23,10 @@ export const STACK_SCREEN_OPTIONS = {
 export const COLORS = {
   BLACK: '#000000',
   WHITE: '#ffffff',
-  BG_TRANSPARENT_GRAY: 'rgba(0,0,0, 0.4)',
   DARK_YELLOW: '#DDBA33',
   BLUE: '#1F80D3',
+  BG_TRANSPARENT_GRAY: 'rgba(0,0,0, 0.4)',
+  BG_GENERAL: '#F0F0F0',
 };
 
 export const COLORS_LIGHT_THEME = {

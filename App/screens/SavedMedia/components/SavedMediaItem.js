@@ -1,10 +1,8 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {StyleSheet, Text, View, Animated} from 'react-native';
 import {Icon} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
-import {useDispatch} from 'react-redux';
 import {BASE_IMAGE_URL, COLORS} from '../../../consts/consts';
-import {SPACE} from '../SavedMediaScreen';
 
 export const SavedMediaItem = ({
   index,
@@ -14,35 +12,64 @@ export const SavedMediaItem = ({
   itemWidth,
   itemHeight,
   horizontalSpace,
+  scrollX,
 }) => {
+  const inputRange = [
+    (index - 1) * itemWidth,
+    index * itemWidth,
+    (index + 1) * itemWidth,
+  ];
+
+  const translateY = scrollX.interpolate({
+    inputRange,
+    outputRange: [0, -60, 0],
+  });
+
   return (
-    <FastImage
-      source={{uri: `${BASE_IMAGE_URL}w500${item.poster_path}`}}
+    <Animated.View
       style={[
-        styles.image,
+        styles.container,
         {
           width: itemWidth,
           height: itemHeight,
           marginLeft: index === 0 ? horizontalSpace : 0,
           marginRight: index === lastIndex ? horizontalSpace : 0,
+          transform: [{translateY}],
         },
       ]}>
-      <View style={styles.topBlock}>
-        <View style={styles.outSideCircle}>
-          <View style={styles.insideCircle}>
-            <Text style={styles.voteText}>{item.vote_average}</Text>
+      <FastImage
+        source={{uri: `${BASE_IMAGE_URL}w500${item.poster_path}`}}
+        style={[
+          styles.image,
+          {
+            width: itemWidth * 0.9,
+            height: itemHeight * 0.9,
+          },
+        ]}>
+        <View style={styles.topBlock}>
+          <View style={styles.outSideCircle}>
+            <View style={styles.insideCircle}>
+              <Text style={styles.voteText}>{item.vote_average}</Text>
+            </View>
           </View>
+
+          <Icon type="antdesign" name="delete" color="red" />
         </View>
 
-        <Icon type="antdesign" name="delete" color="red" />
-      </View>
-
-      <Text style={styles.title}>{item.title}</Text>
-    </FastImage>
+        <Text style={styles.title}>{item.title}</Text>
+      </FastImage>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    // borderWidth: StyleSheet.hairlineWidth,
+    // borderColor: '#000',
+  },
+
   image: {
     //  marginHorizontal: SPACE,
     borderRadius: 20,
