@@ -51,7 +51,7 @@ export const SaveMediaIcon = () => {
       onMutate: async () => {
         setDisabled(true);
         await queryClient.cancelQueries('savedMediaList');
-        const prevData = queryClient.cancelQueries('savedMediaList');
+        const prevData = queryClient.getQueryData('savedMediaList');
 
         return prevData;
       },
@@ -59,18 +59,14 @@ export const SaveMediaIcon = () => {
       onError: (error, _, prevData) => {
         queryClient.setQueryData(prevData);
 
-        console.log('error', error);
-        console.log('extractErrorMessage', extractErrorMessage(error));
         dispatch(actionsCommon.setError(extractErrorMessage(error)));
       },
 
       onSuccess: data => {
-        console.log(data);
         setIsSaved(prev => !prev);
       },
 
       onSettled: () => {
-        console.log('onSettled');
         queryClient.invalidateQueries('savedMediaList');
       },
     },

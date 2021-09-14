@@ -15,6 +15,7 @@ import {Loader} from '../../common/Loader';
 import * as actionsCommon from '../../store/common/actions';
 import {SavedMediaItem} from './components/SavedMediaItem';
 import * as utils from '../../utils/utils';
+import {EmptyList} from '../../common/EmptyList';
 
 export const SavedMediaScreen = () => {
   // const queryClient = useQueryClient();
@@ -22,8 +23,9 @@ export const SavedMediaScreen = () => {
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const {width, height} = useWindowDimensions();
+  const flatListRef = useRef(null);
 
-  const {data, isError, isLoading, error} = useQuery(
+  const {data, isError, isLoading, isFetching, error} = useQuery(
     ['savedMediaList', page],
     () => tmdbServices.getList(page),
   );
@@ -52,12 +54,17 @@ export const SavedMediaScreen = () => {
     [],
   );
 
+  const scrollToEnd = useCallback(
+    index => flatListRef?.current.scrollToIndex({index}),
+    [flatListRef],
+  );
+
   const renderItem = useCallback(
     ({item, index}) => {
       return (
         <SavedMediaItem
           index={index}
-          lastIndex={data?.results.length - 1}
+          isLastIndex={data?.results.length - 1 === index}
           item={item}
           width={width}
           height={height}
@@ -65,15 +72,16 @@ export const SavedMediaScreen = () => {
           itemHeight={ITEM_HEIGHT}
           horizontalSpace={HORIZONTAL_SPACE}
           scrollX={scrollX}
+          scrollToEnd={scrollToEnd}
         />
       );
     },
-    [data, width],
+    [data, width, flatListRef],
   );
 
   return (
     <View style={styles.container}>
-      {isLoading && <Loader />}
+      {(isLoading || isFetching) && <Loader />}
 
       {Platform.OS === 'ios' && (
         <Backdrop
@@ -86,8 +94,9 @@ export const SavedMediaScreen = () => {
       )}
 
       <Animated.FlatList
+        ref={flatListRef}
         data={utils.reverseData(data?.results)}
-        keyExtractor={item => (item.id + item.id).toString()}
+        keyExtractor={item => item.id}
         renderItem={renderItem}
         showsHorizontalScrollIndicator={false}
         getItemLayout={getItemLayout}
@@ -100,6 +109,7 @@ export const SavedMediaScreen = () => {
           {useNativeDriver: true},
         )}
         scrollEventThrottle={16}
+        ListEmptyComponent={<EmptyList itemName="media" />}
       />
     </View>
   );
@@ -108,5 +118,6 @@ export const SavedMediaScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
   },
 });

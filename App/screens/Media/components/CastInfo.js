@@ -82,7 +82,7 @@ export const CastInfo = React.memo(({id, mediaType, width}) => {
       <Animated.FlatList
         data={data?.cast}
         horizontal
-        keyExtractor={item => item.cast_id}
+        keyExtractor={item => item.credit_id}
         renderItem={renderItem}
         showsHorizontalScrollIndicator={false}
         onScroll={onScroll}

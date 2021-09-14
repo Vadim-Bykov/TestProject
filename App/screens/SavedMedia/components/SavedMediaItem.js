@@ -10,12 +10,14 @@ import {
   COLORS,
   DEFAULT_MOVIE_IMAGE,
 } from '../../../consts/consts';
+import {useAnimatedSavedItem} from '../hooks/useAnimatedSavedItem';
+import {TopPart} from './TopPart';
 
 const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
 
 export const SavedMediaItem = ({
   index,
-  lastIndex,
+  isLastIndex,
   item,
   width,
   height,
@@ -23,33 +25,16 @@ export const SavedMediaItem = ({
   itemHeight,
   horizontalSpace,
   scrollX,
+  scrollToEnd,
 }) => {
-  const inputRange = [
-    (index - 1) * itemWidth,
-    index * itemWidth,
-    (index + 1) * itemWidth,
-  ];
-
-  const partValue = useMemo(() => Platform.select({ios: 20, android: 50}), []);
-
-  const translateY = scrollX.interpolate({
-    inputRange,
-    outputRange: [partValue, -40, partValue],
-  });
-
   const {colors} = useTheme();
 
-  const translateX = Animated.add(
+  const {translateY, translateX} = useAnimatedSavedItem({
+    index,
+    itemWidth,
     scrollX,
-    scrollX.interpolate({
-      inputRange: [0, 0.00001 + itemWidth * index],
-      outputRange: [
-        index * horizontalSpace * 2,
-        index === 0 ? 0 : -(itemWidth * index + horizontalSpace),
-      ],
-      extrapolateRight: 'clamp',
-    }),
-  );
+    horizontalSpace,
+  });
 
   return (
     <>
@@ -81,7 +66,7 @@ export const SavedMediaItem = ({
             width: itemWidth,
             height: itemHeight,
             marginLeft: index === 0 ? horizontalSpace : 0,
-            marginRight: index === lastIndex ? horizontalSpace : 0,
+            marginRight: isLastIndex ? horizontalSpace : 0,
             transform: [{translateY}],
           },
         ]}>
@@ -98,7 +83,7 @@ export const SavedMediaItem = ({
               height: itemHeight * 0.9,
             },
           ]}>
-          <View style={styles.topBlock}>
+          {/* <View style={styles.topBlock}>
             <View style={styles.outSideCircle}>
               <View style={styles.insideCircle}>
                 <Text style={styles.voteText}>{item.vote_average}</Text>
@@ -106,7 +91,16 @@ export const SavedMediaItem = ({
             </View>
 
             <Icon type="antdesign" name="delete" color="red" />
-          </View>
+          </View> */}
+
+          <TopPart
+            id={item.id}
+            mediaType={item.media_type}
+            voteAverage={item.vote_average}
+            scrollToEnd={scrollToEnd}
+            isLastIndex={isLastIndex}
+            index={index}
+          />
 
           <Text style={styles.title}>{item.title}</Text>
         </FastImage>
@@ -126,39 +120,39 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 
-  topBlock: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+  // topBlock: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   alignItems: 'center',
+  // },
 
-  outSideCircle: {
-    width: 45,
-    height: 45,
-    borderRadius: 30,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: COLORS.DARK_YELLOW,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  // outSideCircle: {
+  //   width: 45,
+  //   height: 45,
+  //   borderRadius: 30,
+  //   borderWidth: StyleSheet.hairlineWidth,
+  //   borderColor: COLORS.DARK_YELLOW,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
 
-  insideCircle: {
-    width: 35,
-    height: 35,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: COLORS.DARK_YELLOW,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  // insideCircle: {
+  //   width: 35,
+  //   height: 35,
+  //   borderRadius: 20,
+  //   borderWidth: 1,
+  //   borderColor: COLORS.DARK_YELLOW,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
 
-  voteText: {
-    color: COLORS.DARK_YELLOW,
-    fontWeight: 'bold',
-    textShadowColor: COLORS.BG_TRANSPARENT_GRAY,
-    textShadowOffset: {height: 0.5, width: 0.5},
-    textShadowRadius: 1,
-  },
+  // voteText: {
+  //   color: COLORS.DARK_YELLOW,
+  //   fontWeight: 'bold',
+  //   textShadowColor: COLORS.BG_TRANSPARENT_GRAY,
+  //   textShadowOffset: {height: 0.5, width: 0.5},
+  //   textShadowRadius: 1,
+  // },
 
   title: {
     fontSize: 25,
