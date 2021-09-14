@@ -1,6 +1,12 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {StyleSheet, useWindowDimensions, Animated} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {
+  StyleSheet,
+  useWindowDimensions,
+  Animated,
+  View,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import {useQuery, useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {Backdrop} from './components/Backdrop';
@@ -8,8 +14,7 @@ import * as tmdbServices from '../../api/tmdbService';
 import {Loader} from '../../common/Loader';
 import * as actionsCommon from '../../store/common/actions';
 import {SavedMediaItem} from './components/SavedMediaItem';
-
-export const SPACE = 15;
+import * as utils from '../../utils/utils';
 
 export const SavedMediaScreen = () => {
   // const queryClient = useQueryClient();
@@ -28,8 +33,14 @@ export const SavedMediaScreen = () => {
     dispatch(actionsCommon.setError(error?.response?.data.status_message));
   }, [isError, error]);
 
-  const ITEM_HEIGHT = width * 1.1;
-  const ITEM_WIDTH = Math.ceil(width * 0.72);
+  const ITEM_HEIGHT = Platform.select({
+    ios: width * 1.1,
+    android: width * 1.4,
+  });
+  const ITEM_WIDTH = Platform.select({
+    ios: Math.ceil(width * 0.72),
+    android: Math.ceil(width * 0.9),
+  });
   const HORIZONTAL_SPACE = (width - ITEM_WIDTH) / 2;
 
   const getItemLayout = useCallback(
@@ -49,6 +60,7 @@ export const SavedMediaScreen = () => {
           lastIndex={data?.results.length - 1}
           item={item}
           width={width}
+          height={height}
           itemWidth={ITEM_WIDTH}
           itemHeight={ITEM_HEIGHT}
           horizontalSpace={HORIZONTAL_SPACE}
@@ -56,23 +68,25 @@ export const SavedMediaScreen = () => {
         />
       );
     },
-    [data],
+    [data, width],
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {isLoading && <Loader />}
 
-      <Backdrop
-        mediaData={data?.results.reverse()}
-        width={width}
-        height={height}
-        scrollX={scrollX}
-        itemWidth={ITEM_WIDTH}
-      />
+      {Platform.OS === 'ios' && (
+        <Backdrop
+          mediaData={utils.reverseData(data?.results)}
+          width={width}
+          height={height}
+          scrollX={scrollX}
+          itemWidth={ITEM_WIDTH}
+        />
+      )}
 
       <Animated.FlatList
-        data={data?.results}
+        data={utils.reverseData(data?.results)}
         keyExtractor={item => (item.id + item.id).toString()}
         renderItem={renderItem}
         showsHorizontalScrollIndicator={false}
@@ -87,7 +101,7 @@ export const SavedMediaScreen = () => {
         )}
         scrollEventThrottle={16}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

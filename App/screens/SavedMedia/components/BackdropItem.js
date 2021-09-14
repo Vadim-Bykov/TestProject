@@ -1,4 +1,5 @@
 import MaskedView from '@react-native-community/masked-view';
+import {useTheme} from '@react-navigation/native';
 import React, {useCallback} from 'react';
 import {StyleSheet, Text, View, Animated, FlatList, Image} from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -21,6 +22,8 @@ export const BackdropItem = ({
   scrollX,
   itemWidth,
 }) => {
+  const {colors} = useTheme();
+
   const inputRange = [
     (index - 1) * itemWidth,
     index * itemWidth,
@@ -60,7 +63,7 @@ export const BackdropItem = ({
       />
 
       <LinearGradient
-        colors={['transparent', COLORS.BG_GENERAL]}
+        colors={['transparent', colors.background]}
         style={[
           styles.linearGradient,
           {width, height: height * 0.8, bottom: 0},
