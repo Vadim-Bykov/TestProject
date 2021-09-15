@@ -17,13 +17,17 @@ import {SavedMediaItem} from './components/SavedMediaItem';
 import * as utils from '../../utils/utils';
 import {EmptyList} from '../../common/EmptyList';
 
-export const SavedMediaScreen = () => {
+export const SavedMediaScreen = ({navigation}) => {
   // const queryClient = useQueryClient();
   const scrollX = useRef(new Animated.Value(0)).current;
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const {width, height} = useWindowDimensions();
   const flatListRef = useRef(null);
+
+  const goToDetailsScreen = useCallback((id, mediaType) => {
+    navigation.navigate('SavedDetails', {id, mediaType});
+  }, []);
 
   const {data, isError, isLoading, isFetching, error} = useQuery(
     ['savedMediaList', page],
@@ -73,6 +77,7 @@ export const SavedMediaScreen = () => {
           horizontalSpace={HORIZONTAL_SPACE}
           scrollX={scrollX}
           scrollToEnd={scrollToEnd}
+          goToDetailsScreen={goToDetailsScreen}
         />
       );
     },

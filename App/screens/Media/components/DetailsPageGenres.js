@@ -3,7 +3,6 @@ import React, {useRef} from 'react';
 import {useLayoutEffect} from 'react';
 import {Animated, StyleSheet, Text, View} from 'react-native';
 import {ThemeText} from '../../../common/ThemeText';
-import {COLORS} from '../../../consts/consts';
 import {SPACE} from '../MediaDetailsScreen';
 
 export const DetailsPageGenres = ({currentGenres, isTransitionEnd}) => {

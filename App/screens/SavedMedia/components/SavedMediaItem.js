@@ -1,19 +1,17 @@
 import {useTheme} from '@react-navigation/native';
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {Platform} from 'react-native';
-import {StyleSheet, Text, View, Animated} from 'react-native';
+import {StyleSheet, Text, Animated} from 'react-native';
 import {Icon} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
-import LinearGradient from 'react-native-linear-gradient';
 import {
   BASE_IMAGE_URL,
   COLORS,
   DEFAULT_MOVIE_IMAGE,
 } from '../../../consts/consts';
 import {useAnimatedSavedItem} from '../hooks/useAnimatedSavedItem';
+import {AnimatedBackground} from './AnimatedBackground';
 import {TopPart} from './TopPart';
-
-const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
 
 export const SavedMediaItem = ({
   index,
@@ -26,8 +24,13 @@ export const SavedMediaItem = ({
   horizontalSpace,
   scrollX,
   scrollToEnd,
+  goToDetailsScreen,
 }) => {
   const {colors} = useTheme();
+
+  const goToDetails = useCallback(() => {
+    goToDetailsScreen(item.id, item.media_type);
+  }, []);
 
   const {translateY, translateX} = useAnimatedSavedItem({
     index,
@@ -36,27 +39,21 @@ export const SavedMediaItem = ({
     horizontalSpace,
   });
 
+  const title = useMemo(
+    () => (item.media_type === 'movie' ? item.title : item.name),
+    [],
+  );
+
   return (
     <>
       {Platform.OS === 'android' && (
-        <AnimatedFastImage
-          source={{
-            uri: item.backdrop_path
-              ? `${BASE_IMAGE_URL}w1280${item.backdrop_path}`
-              : DEFAULT_MOVIE_IMAGE,
-          }}
-          resizeMode="cover"
-          style={{
-            width,
-            height: height,
-            position: 'absolute',
-            transform: [{translateX: translateX}],
-          }}>
-          <LinearGradient
-            colors={['transparent', colors.background]}
-            style={{position: 'absolute', ...StyleSheet.absoluteFill}}
-          />
-        </AnimatedFastImage>
+        <AnimatedBackground
+          backdropPath={item.backdrop_path}
+          translateX={translateX}
+          width={width}
+          height={height}
+          backgroundColor={colors.background}
+        />
       )}
 
       <Animated.View
@@ -83,16 +80,6 @@ export const SavedMediaItem = ({
               height: itemHeight * 0.9,
             },
           ]}>
-          {/* <View style={styles.topBlock}>
-            <View style={styles.outSideCircle}>
-              <View style={styles.insideCircle}>
-                <Text style={styles.voteText}>{item.vote_average}</Text>
-              </View>
-            </View>
-
-            <Icon type="antdesign" name="delete" color="red" />
-          </View> */}
-
           <TopPart
             id={item.id}
             mediaType={item.media_type}
@@ -102,8 +89,18 @@ export const SavedMediaItem = ({
             index={index}
           />
 
-          <Text style={styles.title}>{item.title}</Text>
+          <Icon
+            type="entypo"
+            name="info"
+            color={COLORS.DARK_YELLOW}
+            containerStyle={styles.infoIcon}
+            onPress={goToDetails}
+          />
         </FastImage>
+
+        <Text style={[styles.title, {textShadowColor: colors.text}]}>
+          {title.length > 25 ? `${title.slice(0, 24)}...` : title}
+        </Text>
       </Animated.View>
     </>
   );
@@ -118,49 +115,24 @@ const styles = StyleSheet.create({
   image: {
     borderRadius: 20,
     padding: 20,
+    justifyContent: 'space-between',
   },
 
-  // topBlock: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  //   alignItems: 'center',
-  // },
-
-  // outSideCircle: {
-  //   width: 45,
-  //   height: 45,
-  //   borderRadius: 30,
-  //   borderWidth: StyleSheet.hairlineWidth,
-  //   borderColor: COLORS.DARK_YELLOW,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
-
-  // insideCircle: {
-  //   width: 35,
-  //   height: 35,
-  //   borderRadius: 20,
-  //   borderWidth: 1,
-  //   borderColor: COLORS.DARK_YELLOW,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
-
-  // voteText: {
-  //   color: COLORS.DARK_YELLOW,
-  //   fontWeight: 'bold',
-  //   textShadowColor: COLORS.BG_TRANSPARENT_GRAY,
-  //   textShadowOffset: {height: 0.5, width: 0.5},
-  //   textShadowRadius: 1,
-  // },
+  infoIcon: {
+    alignSelf: 'flex-end',
+  },
 
   title: {
     fontSize: 25,
     alignSelf: 'center',
     color: COLORS.WHITE,
-    textShadowColor: COLORS.BLACK,
+    // textShadowColor: COLORS.BLACK,
     textShadowOffset: {height: 1, width: 1},
     textShadowRadius: 3,
-    marginTop: 25,
+    textAlign: 'center',
+    width: Platform.select({
+      ios: '100%',
+      android: '90%',
+    }),
   },
 });

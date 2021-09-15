@@ -7,7 +7,6 @@ import React, {
   useState,
 } from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
-import {Button} from 'react-native-elements';
 import {useQuery, useQueryClient} from 'react-query';
 import {useDispatch, useSelector} from 'react-redux';
 import * as tmdbService from '../../api/tmdbService';
