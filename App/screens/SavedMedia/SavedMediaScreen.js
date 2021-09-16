@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   StyleSheet,
   useWindowDimensions,
@@ -6,21 +6,24 @@ import {
   View,
   ScrollView,
   Platform,
+  RefreshControl,
 } from 'react-native';
-import {useQuery, useQueryClient} from 'react-query';
+import {useInfiniteQuery, useQuery} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {Backdrop} from './components/Backdrop';
 import * as tmdbServices from '../../api/tmdbService';
 import {Loader} from '../../common/Loader';
 import * as actionsCommon from '../../store/common/actions';
 import {SavedMediaItem} from './components/SavedMediaItem';
-import * as utils from '../../utils/utils';
 import {EmptyList} from '../../common/EmptyList';
+import {COLORS} from '../../consts/consts';
 
 export const SavedMediaScreen = ({navigation}) => {
-  // const queryClient = useQueryClient();
   const scrollX = useRef(new Animated.Value(0)).current;
-  const [page, setPage] = useState(1);
+
+  const [mediaData, setMediaData] = useState([]);
+  const [isTransformData, setIsTransformData] = useState(true);
+  // const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const {width, height} = useWindowDimensions();
   const flatListRef = useRef(null);
@@ -29,14 +32,47 @@ export const SavedMediaScreen = ({navigation}) => {
     navigation.navigate('SavedDetails', {id, mediaType});
   }, []);
 
-  const {data, isError, isLoading, isFetching, error} = useQuery(
-    ['savedMediaList', page],
-    () => tmdbServices.getList(page),
-  );
+  // const {data, isError, isLoading, isFetching, error} = useQuery(
+  //   ['savedMediaList', page],
+  //   () => tmdbServices.getList(page),
+  // );
+
+  const {
+    data,
+    isError,
+    isLoading,
+    isFetching,
+    error,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery('savedMediaList', tmdbServices.getInfinityList, {
+    getNextPageParam: pageParam => pageParam.next,
+  });
 
   useEffect(() => {
-    isError && error && console.log(error.response?.data.status_message);
-    dispatch(actionsCommon.setError(error?.response?.data.status_message));
+    setMediaData([]);
+    // setIsTransformData(prev => !prev);
+    const mediaSet = new Set();
+
+    data?.pages.forEach(page => {
+      page.data.results.forEach(media => {
+        if (!mediaSet.has(media.id)) {
+          mediaSet.add(media.id);
+          setMediaData(prev => [...prev, media]);
+        }
+      });
+    });
+
+    data?.pages && setIsTransformData(false);
+  }, [data, hasNextPage]);
+
+  const loadNextPage = useCallback(() => {
+    hasNextPage && fetchNextPage();
+  }, [hasNextPage]);
+
+  useEffect(() => {
+    isError &&
+      dispatch(actionsCommon.setError(error?.response?.data.status_message));
   }, [isError, error]);
 
   const ITEM_HEIGHT = Platform.select({
@@ -59,7 +95,7 @@ export const SavedMediaScreen = ({navigation}) => {
   );
 
   const scrollToEnd = useCallback(
-    index => flatListRef?.current.scrollToIndex({index}),
+    index => index >= 0 && flatListRef?.current.scrollToIndex({index}),
     [flatListRef],
   );
 
@@ -68,7 +104,7 @@ export const SavedMediaScreen = ({navigation}) => {
       return (
         <SavedMediaItem
           index={index}
-          isLastIndex={data?.results.length - 1 === index}
+          isLastIndex={mediaData.length - 1 === index}
           item={item}
           width={width}
           height={height}
@@ -81,16 +117,24 @@ export const SavedMediaScreen = ({navigation}) => {
         />
       );
     },
-    [data, width, flatListRef],
+    [mediaData, width, flatListRef],
+  );
+
+  const isShowLoader = useMemo(
+    () =>
+      isLoading ||
+      isTransformData ||
+      Platform.select({ios: isFetching, android: false}),
+    [isLoading, isFetching, isTransformData],
   );
 
   return (
     <View style={styles.container}>
-      {(isLoading || isFetching) && <Loader />}
+      {isShowLoader && <Loader />}
 
       {Platform.OS === 'ios' && (
         <Backdrop
-          mediaData={utils.reverseData(data?.results)}
+          mediaData={mediaData}
           width={width}
           height={height}
           scrollX={scrollX}
@@ -100,7 +144,7 @@ export const SavedMediaScreen = ({navigation}) => {
 
       <Animated.FlatList
         ref={flatListRef}
-        data={utils.reverseData(data?.results)}
+        data={mediaData}
         keyExtractor={item => item.id}
         renderItem={renderItem}
         showsHorizontalScrollIndicator={false}
@@ -114,7 +158,22 @@ export const SavedMediaScreen = ({navigation}) => {
           {useNativeDriver: true},
         )}
         scrollEventThrottle={16}
-        ListEmptyComponent={<EmptyList itemName="media" />}
+        ListEmptyComponent={
+          isTransformData ? null : <EmptyList itemName="media" />
+        }
+        onEndReached={loadNextPage}
+        // Maybe because of snapToInterval function onEndReached calls after adding integer (number of items before end reached)
+        onEndReachedThreshold={5}
+        refreshControl={
+          <RefreshControl
+            refreshing={Platform.select({ios: false, android: isFetching})}
+            progressViewOffset={50}
+            tintColor={COLORS.DARK_YELLOW}
+          />
+        }
+        contentContainerStyle={
+          Platform.OS === 'android' && {flex: 1, justifyContent: 'center'}
+        }
       />
     </View>
   );
@@ -124,5 +183,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
 });

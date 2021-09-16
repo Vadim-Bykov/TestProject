@@ -49,14 +49,24 @@ const getRequestBody = (mediaType, mediaId) => ({
   ],
 });
 
-export const getList = (page = 1) =>
+export const getList = ({pageParam = 1}) =>
   listInstance
     .get(`/list/7107051`, {
       // url: '7107051',
-      params: {page},
-      sort_by: 'original_order.desc',
+      params: {page: pageParam, sort_by: 'original_order.desc'},
     })
     .then(res => res.data);
+
+export const getInfinityList = ({pageParam = 1}) =>
+  listInstance
+    .get(`/list/7107051`, {
+      // url: '7107051',
+      params: {page: pageParam, sort_by: 'original_order.desc'},
+    })
+    .then(res => ({
+      data: res.data,
+      next: res.data.total_pages > pageParam ? pageParam + 1 : false,
+    }));
 
 export const addMedia = (mediaType, mediaId) =>
   listInstance
