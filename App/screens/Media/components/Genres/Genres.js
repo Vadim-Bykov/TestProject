@@ -1,8 +1,8 @@
 import React, {useCallback} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import * as actionsMedia from '../../../store/media/actions';
-import * as selectorsMedia from '../../../store/media/selectors';
+import * as actionsMedia from '../../../../store/media/actions';
+import * as selectorsMedia from '../../../../store/media/selectors';
 import {Genre} from './Genre';
 
 export const Genres = React.memo(({genres, mode}) => {

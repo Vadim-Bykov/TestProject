@@ -2,7 +2,7 @@ import {useTheme} from '@react-navigation/native';
 import React, {useLayoutEffect, useRef} from 'react';
 import {StyleSheet, Text, Animated} from 'react-native';
 import {Icon} from 'react-native-elements';
-import {COLORS} from '../../../consts/consts';
+import {COLORS} from '../../../../consts/consts';
 import {SaveMediaIcon} from './SaveMediaIcon';
 
 export const StarBlock = ({width, mediaDetails}) => {

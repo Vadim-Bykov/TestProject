@@ -1,7 +1,7 @@
 import {useTheme} from '@react-navigation/native';
 import React, {useCallback, useRef} from 'react';
 import {StyleSheet, Text, TouchableOpacity, Animated} from 'react-native';
-import {COLORS} from '../../../consts/consts';
+import {COLORS} from '../../../../consts/consts';
 
 export const Genre = ({genre, isActive, onSetGenre, mode}) => {
   const onPress = useCallback(() => {

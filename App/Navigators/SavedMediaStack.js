@@ -3,7 +3,7 @@ import {Platform} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {STACK_SCREEN_OPTIONS} from '../consts/consts';
 import {SavedMediaScreen} from '../screens/SavedMedia/SavedMediaScreen';
-import {MediaDetailsScreen} from '../screens/Media/MediaDetailsScreen';
+import {MediaDetailsScreen} from '../screens/MediaDetails/MediaDetailsScreen';
 import {colors, Icon} from 'react-native-elements';
 
 const Stack = createStackNavigator();

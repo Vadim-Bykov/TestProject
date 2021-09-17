@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
-import * as tmdbService from '../../../api/tmdbService';
+import * as tmdbService from '../../../../api/tmdbService';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
-import * as actionsCommon from '../../../store/common/actions';
+import * as actionsCommon from '../../../../store/common/actions';
 import {useRoute} from '@react-navigation/native';
-import {extractErrorMessage} from '../../../utils/utils';
-import {COLORS} from '../../../consts/consts';
+import {extractErrorMessage} from '../../../../utils/utils';
+import {COLORS} from '../../../../consts/consts';
 
 export const SaveMediaIcon = () => {
   const dispatch = useDispatch();

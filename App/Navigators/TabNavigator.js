@@ -16,6 +16,7 @@ import {MediaStackNavigator} from './MediaStackNavigator';
 import {Settings} from '../screens/Settings/Settings';
 import {useTheme} from '@react-navigation/native';
 import {SavedMediaStack} from './SavedMediaStack';
+import {SavedMediaGesture} from '../screens/SavedMediaGesture/SavedMediaGesture';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -66,6 +67,9 @@ export const TabNavigator = () => {
           } else if (route.name === 'SavedMediaTab') {
             type = 'ionicon';
             iconName = focused ? 'save' : 'save-outline';
+          } else if (route.name === 'SavedGestureTab') {
+            type = 'antdesign';
+            iconName = focused ? 'heart' : 'hearto';
           }
 
           return <Icon type={type} name={iconName} size={size} color={color} />;
@@ -91,6 +95,9 @@ export const TabNavigator = () => {
             case 'SavedMediaTab':
               return focused && <MyText color={color}>Saved</MyText>;
 
+            case 'SavedGestureTab':
+              return focused && <MyText color={color}>Favorite</MyText>;
+
             default:
               null;
           }
@@ -100,6 +107,7 @@ export const TabNavigator = () => {
       <Tab.Screen name="ProfileTab" component={ProfileStackNavigator} />
       <Tab.Screen name="MediaTab" component={MediaStackNavigator} />
       <Tab.Screen name="SavedMediaTab" component={SavedMediaStack} />
+      <Tab.Screen name="SavedGestureTab" component={SavedMediaGesture} />
       <Tab.Screen name="SettingsTab" component={Settings} />
     </Tab.Navigator>
   );

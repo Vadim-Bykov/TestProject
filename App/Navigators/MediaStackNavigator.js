@@ -2,7 +2,7 @@ import React from 'react';
 import {Platform} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {MediaScreen} from '../screens/Media/MediaScreen';
-import {MediaDetailsScreen} from '../screens/Media/MediaDetailsScreen';
+import {MediaDetailsScreen} from '../screens/MediaDetails/MediaDetailsScreen';
 import {colors, Icon} from 'react-native-elements';
 import {STACK_SCREEN_OPTIONS} from '../consts/consts';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';

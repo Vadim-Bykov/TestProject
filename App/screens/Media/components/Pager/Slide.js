@@ -7,13 +7,13 @@ import {
   BASE_IMAGE_URL,
   COLORS,
   DEFAULT_MOVIE_IMAGE,
-} from '../../../consts/consts';
-import {useAnimated} from '../hooks/useAnimated';
-import * as selectorsMedia from '../../../store/media/selectors';
+} from '../../../../consts/consts';
+import {useAnimated} from '../../hooks/useAnimated';
+import * as selectorsMedia from '../../../../store/media/selectors';
 import {useDispatch, useSelector} from 'react-redux';
-import * as actionsMedia from '../../../store/media/actions';
+import * as actionsMedia from '../../../../store/media/actions';
 import {SharedElement} from 'react-navigation-shared-element';
-import {ThemeText} from '../../../common/ThemeText';
+import {ThemeText} from '../../../../common/ThemeText';
 import {useTheme} from '@react-navigation/native';
 
 const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);

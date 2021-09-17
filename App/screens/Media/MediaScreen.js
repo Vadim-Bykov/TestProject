@@ -13,12 +13,12 @@ import * as tmdbService from '../../api/tmdbService';
 import * as actionsMedia from '../../store/media/actions';
 import * as actionsCommon from '../../store/common/actions';
 import * as selectorsMedia from '../../store/media/selectors';
-import {Genres} from './components/Genres';
+import {Genres} from './components/Genres/Genres';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ModeSwitch} from './components/ModeSwitch';
 import {MediaTypeToggle} from './components/MediaTypeToggle';
 import {Loader} from '../../common/Loader';
-import {Pager} from './components/Pager';
+import {Pager} from './components/Pager/Pager';
 
 // const MediaContext = createContext();
 // export const useMediaContext = () => useContext(MediaContext);

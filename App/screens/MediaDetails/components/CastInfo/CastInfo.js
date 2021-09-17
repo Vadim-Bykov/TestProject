@@ -2,11 +2,11 @@ import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {Animated, StyleSheet, View, Text, Easing} from 'react-native';
 import {useQuery} from 'react-query';
 import {useDispatch} from 'react-redux';
-import * as tmdbService from '../../../api/tmdbService';
-import {Loader} from '../../../common/Loader';
-import {ThemeText} from '../../../common/ThemeText';
-import * as actionsCommon from '../../../store/common/actions';
-import {SPACE} from '../MediaDetailsScreen';
+import * as tmdbService from '../../../../api/tmdbService';
+import {Loader} from '../../../../common/Loader';
+import {ThemeText} from '../../../../common/ThemeText';
+import * as actionsCommon from '../../../../store/common/actions';
+import {SPACE} from '../../MediaDetailsScreen';
 import {CastInfoItem} from './CastInfoItem';
 
 export const CastInfo = React.memo(({id, mediaType, width}) => {

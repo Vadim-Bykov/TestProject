@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useWindowDimensions, Animated} from 'react-native';
 import {useSelector} from 'react-redux';
-import * as selectorsMedia from '../../../store/media/selectors';
+import * as selectorsMedia from '../../../../store/media/selectors';
+import {OverflowTitles} from './OverflowTitles';
 import {Slide} from './Slide';
 
 export const Pager = React.memo(({mediaType, goToDetails}) => {
@@ -60,33 +61,43 @@ export const Pager = React.memo(({mediaType, goToDetails}) => {
   // }, []);
 
   return (
-    <Animated.FlatList
-      ref={flatListRef}
-      data={mediaDate}
-      renderItem={renderItem}
-      keyExtractor={item => item.id}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      getItemLayout={getItemLayout}
-      // pagingEnabled
-      // disableIntervalMomentum
-      snapToInterval={itemWidth}
-      decelerationRate={0.88}
-      // viewabilityConfig={{viewAreaCoveragePercentThreshold: 50}}
-      // onViewableItemsChanged={onViewableItemsChanged}
-      // extraData={activeIndex}
-      onScroll={Animated.event(
-        [
-          {
-            nativeEvent: {
-              contentOffset: {
-                x: scroll,
+    <>
+      {mediaDate && (
+        <OverflowTitles
+          mediaDate={mediaDate}
+          scroll={scroll}
+          itemWidth={itemWidth}
+        />
+      )}
+
+      <Animated.FlatList
+        ref={flatListRef}
+        data={mediaDate}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        getItemLayout={getItemLayout}
+        // pagingEnabled
+        // disableIntervalMomentum
+        snapToInterval={itemWidth}
+        decelerationRate={0.88}
+        // viewabilityConfig={{viewAreaCoveragePercentThreshold: 50}}
+        // onViewableItemsChanged={onViewableItemsChanged}
+        // extraData={activeIndex}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: {
+                  x: scroll,
+                },
               },
             },
-          },
-        ],
-        {useNativeDriver: true},
-      )}
-    />
+          ],
+          {useNativeDriver: true},
+        )}
+      />
+    </>
   );
 });

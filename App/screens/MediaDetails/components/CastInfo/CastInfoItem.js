@@ -1,8 +1,8 @@
 import React, {useLayoutEffect, useRef} from 'react';
 import {Animated, StyleSheet, Text} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {ThemeText} from '../../../common/ThemeText';
-import {BASE_IMAGE_URL, DEFAULT_AVATAR} from '../../../consts/consts';
+import {ThemeText} from '../../../../common/ThemeText';
+import {BASE_IMAGE_URL, DEFAULT_AVATAR} from '../../../../consts/consts';
 
 export const CastInfoItem = ({
   index,
