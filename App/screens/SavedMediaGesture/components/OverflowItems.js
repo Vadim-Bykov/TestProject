@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View, Animated} from 'react-native';
+import {ThemeText} from '../../../common/ThemeText';
 
 const OVERFLOW_HEIGHT = 50;
 
@@ -18,11 +19,11 @@ export const OverflowItems = ({data, scrollXAnimated}) => {
           const title = item.media_type === 'movie' ? item.title : item.name;
           return (
             <View key={index} style={styles.overflowItem}>
-              <Text style={styles.title}>
+              <ThemeText style={styles.title}>
                 {title.length > 16
                   ? `${title.slice(0, 15).toUpperCase()}...`
                   : title.toUpperCase()}
-              </Text>
+              </ThemeText>
             </View>
           );
         })}
