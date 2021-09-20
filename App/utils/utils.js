@@ -21,3 +21,6 @@ export const reverseData = data => {
     return newData.reverse();
   } else return null;
 };
+
+export const cutStringToSize = (string, size) =>
+  string.length > size ? `${string.slice(0, size - 1)}...` : string;

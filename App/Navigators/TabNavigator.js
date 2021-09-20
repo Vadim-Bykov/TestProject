@@ -47,7 +47,7 @@ export const TabNavigator = () => {
 
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
+      screenOptions={({navigation, route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
           let type;
@@ -58,6 +58,16 @@ export const TabNavigator = () => {
           } else if (route.name === 'MediaTab') {
             type = 'ionicon';
             iconName = focused ? 'ios-list' : 'ios-list-outline';
+
+            return (
+              <Icon
+                type={type}
+                name={iconName}
+                size={size}
+                color={color}
+                // onPress={navigation.navigate('MediaTab', {screen: 'Movies'})}
+              />
+            );
           } else if (route.name === 'ProfileTab') {
             type = 'font-awesome';
             iconName = focused ? 'user-circle-o' : 'user';
@@ -103,9 +113,13 @@ export const TabNavigator = () => {
           }
         },
       })}>
-      <Tab.Screen name="HomeTab" component={HomeStackNavigator} />
+      <Tab.Screen name="HomeTab" component={MediaStackNavigator} />
       <Tab.Screen name="ProfileTab" component={ProfileStackNavigator} />
-      <Tab.Screen name="MediaTab" component={MediaStackNavigator} />
+      <Tab.Screen
+        name="MediaTab"
+        component={MediaStackNavigator}
+        initialParams={{screen: 'Movies'}}
+      />
       <Tab.Screen name="SavedMediaTab" component={SavedMediaStack} />
       <Tab.Screen name="SavedGestureTab" component={SavedMediaGesture} />
       <Tab.Screen name="SettingsTab" component={Settings} />
