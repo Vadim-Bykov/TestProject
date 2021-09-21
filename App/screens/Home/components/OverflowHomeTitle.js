@@ -1,17 +1,15 @@
-import {useTheme} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, View, Animated} from 'react-native';
+import {COLORS} from '../../../consts/consts';
 import * as utils from '../../../utils/utils';
 import {useAnimatedTitle} from '../hooks/useAnimatedTitle';
 
 export const TITLE_HEIGHT = 30;
 
-export const OverflowHomeTitle = ({medias, scrollX, ITEM_WIDTH}) => {
-  const {colors} = useTheme();
-
+export const OverflowHomeTitle = ({mediaData, scrollX, ITEM_WIDTH}) => {
   return (
     <View style={styles.container}>
-      {medias.map((media, index) => {
+      {mediaData.map((media, index) => {
         const {translateY, scale, rotateX} = useAnimatedTitle({
           scrollX,
           ITEM_WIDTH,
@@ -22,7 +20,7 @@ export const OverflowHomeTitle = ({medias, scrollX, ITEM_WIDTH}) => {
           <Animated.Text
             key={media.title}
             style={[
-              styles.titleContainer,
+              styles.title,
               {
                 transform: [
                   {translateY},
@@ -30,7 +28,6 @@ export const OverflowHomeTitle = ({medias, scrollX, ITEM_WIDTH}) => {
                   {rotateX},
                   {perspective: 1000},
                 ],
-                color: colors.text,
               },
             ]}>
             {utils.cutStringToSize(media.title, 20)}
@@ -49,10 +46,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
-  titleContainer: {
+  title: {
     height: TITLE_HEIGHT,
     justifyContent: 'center',
     fontSize: 25,
     textTransform: 'uppercase',
+    color: COLORS.WHITE,
+    textShadowColor: COLORS.BLACK,
+    textShadowRadius: 3,
+    textShadowOffset: {height: 2, width: 2},
   },
 });

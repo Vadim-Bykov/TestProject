@@ -29,6 +29,7 @@
     "react-native-global-props": "^1.1.5",
     "react-native-image-picker": "^4.0.6",
     "react-native-linear-gradient": "^2.5.6",
+    "react-native-navigation-bar-color": "^2.0.1",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.6.0",
     "react-native-shared-element": "^0.8.2",

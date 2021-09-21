@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
-import {ThemeText} from '../../../common/ThemeText';
+import {COLORS} from '../../../consts/consts';
 
 export const ButtonBlock = ({page, isLoading, totalPages, setPage}) => {
   const goToNextPage = useCallback(() => {
@@ -23,7 +23,7 @@ export const ButtonBlock = ({page, isLoading, totalPages, setPage}) => {
         onPress={goToPrevPage}
       />
 
-      <ThemeText style={styles.pageNumber}>{page}</ThemeText>
+      <Text style={styles.pageNumber}>{page}</Text>
 
       <Button
         title="Next"
@@ -53,9 +53,14 @@ const styles = StyleSheet.create({
 
   button: {
     borderWidth: 1,
+    backgroundColor: 'rgba(555,555,555,0.2)',
   },
 
   pageNumber: {
     fontSize: 20,
+    color: COLORS.WHITE,
+    textShadowColor: COLORS.BLACK,
+    textShadowRadius: 1,
+    textShadowOffset: {height: 1, width: 1},
   },
 });

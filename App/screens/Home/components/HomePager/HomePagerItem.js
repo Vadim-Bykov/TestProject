@@ -1,5 +1,5 @@
-import React, {useCallback, useRef} from 'react';
-import {Animated, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback} from 'react';
+import {Animated, StyleSheet} from 'react-native';
 import {Icon} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {BASE_IMAGE_URL, DEFAULT_MOVIE_IMAGE} from '../../../../consts/consts';

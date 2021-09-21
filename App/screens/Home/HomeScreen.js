@@ -1,20 +1,24 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {StyleSheet, ScrollView, Animated} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import * as actionsCommon from '../../store/common/actions';
 import {useDispatch} from 'react-redux';
 import {Loader} from '../../common/Loader';
 import {useQuery, useQueryClient} from 'react-query';
 import * as tmdbService from '../../api/tmdbService';
-import {extractErrorMessage} from '../../utils/utils';
+import * as utils from '../../utils/utils';
 import {ButtonBlock} from './components/ButtonBlock';
 import {HomePager} from './components/HomePager/HomePager';
+import FastImage from 'react-native-fast-image';
+import {BASE_IMAGE_URL, DEFAULT_MOVIE_IMAGE} from '../../consts/consts';
+import {AnimatedHomeBackground} from './components/AnimatedHomeBackground';
 
-const SPACING = 10;
+export const SPACING = 10;
 
 export const HomeScreen = ({navigation}) => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
+  const scrollX = useRef(new Animated.Value(0)).current;
   const [page, setPage] = useState(1);
   const [mediaType, setMediaType] = useState('movie');
 
@@ -29,7 +33,8 @@ export const HomeScreen = ({navigation}) => {
   );
 
   useEffect(() => {
-    isError && dispatch(actionsCommon.setError(extractErrorMessage(error)));
+    isError &&
+      dispatch(actionsCommon.setError(utils.extractErrorMessage(error)));
   }, [isError]);
 
   useEffect(() => {
@@ -42,6 +47,8 @@ export const HomeScreen = ({navigation}) => {
     <>
       {isLoading && <Loader />}
 
+      <AnimatedHomeBackground mediaData={data?.results} scrollX={scrollX} />
+
       <SafeAreaView style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.scrollViewContainer}
@@ -49,6 +56,7 @@ export const HomeScreen = ({navigation}) => {
           showsHorizontalScrollIndicator={false}>
           <HomePager
             data={data}
+            scrollX={scrollX}
             goToDetails={goToDetails}
             isFetching={isFetching}
           />
