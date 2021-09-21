@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
@@ -12,16 +12,26 @@ import {STACK_SCREEN_OPTIONS} from '../consts/consts';
 import {useTheme} from '@react-navigation/native';
 import * as selectorsCommon from '../store/common/selectors';
 import {Error} from '../common/Error';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import * as utils from '../utils/utils';
 
 const Stack = createStackNavigator();
 
 export const MainStackNavigator = () => {
   const [initializing, setInitializing] = useState(true);
   const isAuth = useSelector(selectorsAuth.getIsAuth);
-  const {dark} = useTheme();
+  const {dark, colors} = useTheme();
   const error = useSelector(selectorsCommon.getError);
 
   const dispatch = useDispatch();
+
+  useLayoutEffect(() => {
+    try {
+      changeNavigationBarColor(colors.background, !dark);
+    } catch (error) {
+      dispatch(utils.extractErrorMessage(error));
+    }
+  }, [dark]);
 
   const onAuthStateChanged = user => {
     if (user) {

@@ -23,7 +23,7 @@ export const AnimatedHomeBackground = ({mediaData, scrollX}) => {
             key={`poster${item.id}`}
             source={{
               uri: item.backdrop_path
-                ? `${BASE_IMAGE_URL}w500${item.backdrop_path}`
+                ? `${BASE_IMAGE_URL}w1280${item.backdrop_path}`
                 : DEFAULT_MOVIE_IMAGE,
             }}
             style={[styles.image, {transform: [{translateX}]}]}
