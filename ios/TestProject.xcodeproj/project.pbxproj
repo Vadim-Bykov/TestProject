@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* TestProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TestProjectTests.m */; };
+		0D04A00526FA07D300DD6981 /* libswiftDataDetection.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D04A00426FA07D300DD6981 /* libswiftDataDetection.tbd */; };
 		0D71954B26E8F6FB0031EA5E /* Nunito-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D71954A26E8F6FB0031EA5E /* Nunito-Light.ttf */; };
 		0DCC522E26D39F2500D8431F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0DCC522D26D39F2500D8431F /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -32,6 +33,7 @@
 		00E356EE1AD99517003FC87E /* TestProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* TestProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestProjectTests.m; sourceTree = "<group>"; };
+		0D04A00426FA07D300DD6981 /* libswiftDataDetection.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftDataDetection.tbd; path = usr/lib/swift/libswiftDataDetection.tbd; sourceTree = SDKROOT; };
 		0D71954A26E8F6FB0031EA5E /* Nunito-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Light.ttf"; sourceTree = "<group>"; };
 		0DCC522D26D39F2500D8431F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* TestProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D04A00526FA07D300DD6981 /* libswiftDataDetection.tbd in Frameworks */,
 				95E4CD5379681F26EB4593D0 /* libPods-TestProject.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +114,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0D04A00426FA07D300DD6981 /* libswiftDataDetection.tbd */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				F16742C72FD6910C8F35D2E0 /* libPods-TestProject.a */,
 				6C6AD20D20F362979B510094 /* libPods-TestProject-TestProjectTests.a */,
@@ -528,6 +532,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -552,6 +560,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

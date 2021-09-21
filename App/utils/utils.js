@@ -58,6 +58,7 @@ export const getHomePagerDimensions = () => {
     ITEM_WIDTH,
     ITEM_HEIGHT,
     width,
+    height,
     isLandScape,
   };
 };

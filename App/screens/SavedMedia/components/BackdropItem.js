@@ -1,7 +1,7 @@
 import MaskedView from '@react-native-community/masked-view';
 import {useTheme} from '@react-navigation/native';
-import React, {useCallback} from 'react';
-import {StyleSheet, Text, View, Animated, FlatList, Image} from 'react-native';
+import React from 'react';
+import {StyleSheet, Animated} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 import Svg, {Rect} from 'react-native-svg';

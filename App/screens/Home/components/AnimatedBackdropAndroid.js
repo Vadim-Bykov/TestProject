@@ -3,11 +3,14 @@ import {StyleSheet, Animated, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {BASE_IMAGE_URL, DEFAULT_MOVIE_IMAGE} from '../../../consts/consts';
 import * as utils from '../../../utils/utils';
+import LinearGradient from 'react-native-linear-gradient';
+import {useTheme} from '@react-navigation/native';
 
 const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
 
-export const AnimatedHomeBackground = ({mediaData, scrollX}) => {
+export const AnimatedBackdropAndroid = ({mediaData, scrollX}) => {
   const {width, ITEM_WIDTH} = utils.getHomePagerDimensions();
+  const {colors} = useTheme();
 
   return (
     <>
@@ -31,7 +34,11 @@ export const AnimatedHomeBackground = ({mediaData, scrollX}) => {
         );
       })}
 
-      <View style={[styles.container, styles.image]} />
+      {/* <View style={[styles.container, styles.image]} /> */}
+      <LinearGradient
+        colors={['transparent', colors.background]}
+        style={styles.image}
+      />
     </>
   );
 };

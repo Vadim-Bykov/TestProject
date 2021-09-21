@@ -5,7 +5,6 @@ import {
   Animated,
   Platform,
 } from 'react-native';
-// import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {HomePagerItem} from './HomePagerItem';
 import {OverflowHomeTitle} from '../OverflowHomeTitle';
 import * as utils from '../../../../utils/utils';
@@ -14,35 +13,11 @@ import * as utils from '../../../../utils/utils';
 
 export const HomePager = ({data, goToDetails, isFetching, scrollX}) => {
   const flatListRef = useRef(null);
-  // const {width, height} = useWindowDimensions();
-  // const {top, left, right} = useSafeAreaInsets();
-  // const scrollX = useRef(new Animated.Value(0)).current;
 
   useLayoutEffect(() => {
     data?.results &&
       flatListRef?.current?.scrollToIndex({index: 0, animated: false});
   }, [data?.results]);
-
-  // const isLandScape = width > height;
-
-  // const FLAT_LIST_WINDOW_WIDTH = width - SPACING * 2 - left - right;
-  // const PORTRAIT_SLIDES_COUNT = 1;
-  // const ITEM_HEIGHT = isLandScape
-  //   ? height - top - 60 - SPACING * 2 // 60 - bottomTabNavigator height
-  //   : (FLAT_LIST_WINDOW_WIDTH / PORTRAIT_SLIDES_COUNT) * 1.35;
-  // const LANDSCAPE_SLIDES_COUNT = Math.floor(
-  //   (FLAT_LIST_WINDOW_WIDTH / ITEM_HEIGHT) * 1.5,
-  // );
-  // // const LANDSCAPE_SLIDES_COUNT = 3;
-
-  // const SHOWN_SLIDES_COUNT = isLandScape
-  //   ? LANDSCAPE_SLIDES_COUNT
-  //   : PORTRAIT_SLIDES_COUNT;
-  // const ITEM_WIDTH = Math.floor(FLAT_LIST_WINDOW_WIDTH / SHOWN_SLIDES_COUNT);
-  // // const SIDE_SPACER_WIDTH =
-  // //   (FLAT_LIST_WINDOW_WIDTH -
-  // //     (isLandScape ? ITEM_WIDTH * SHOWN_SLIDES_COUNT : ITEM_WIDTH)) /
-  // //   2;
 
   const {FLAT_LIST_WINDOW_WIDTH, ITEM_HEIGHT, ITEM_WIDTH, width, isLandScape} =
     utils.getHomePagerDimensions();

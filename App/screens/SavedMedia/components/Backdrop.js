@@ -1,4 +1,3 @@
-import MaskedView from '@react-native-community/masked-view';
 import React, {useCallback} from 'react';
 import {StyleSheet, View, FlatList} from 'react-native';
 import {BackdropItem} from './BackdropItem';

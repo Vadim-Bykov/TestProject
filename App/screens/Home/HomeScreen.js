@@ -9,9 +9,9 @@ import * as tmdbService from '../../api/tmdbService';
 import * as utils from '../../utils/utils';
 import {ButtonBlock} from './components/ButtonBlock';
 import {HomePager} from './components/HomePager/HomePager';
-import FastImage from 'react-native-fast-image';
-import {BASE_IMAGE_URL, DEFAULT_MOVIE_IMAGE} from '../../consts/consts';
-import {AnimatedHomeBackground} from './components/AnimatedHomeBackground';
+import {AnimatedBackdropAndroid} from './components/AnimatedBackdropAndroid';
+import {AnimatedBackdropIOS} from './components/AnimatedBackdropIOS';
+import {Platform} from 'react-native';
 
 export const SPACING = 10;
 
@@ -47,7 +47,17 @@ export const HomeScreen = ({navigation}) => {
     <>
       {isLoading && <Loader />}
 
-      <AnimatedHomeBackground mediaData={data?.results} scrollX={scrollX} />
+      {Platform.select({
+        ios: (
+          <AnimatedBackdropIOS mediaData={data?.results} scrollX={scrollX} />
+        ),
+        android: (
+          <AnimatedBackdropAndroid
+            mediaData={data?.results}
+            scrollX={scrollX}
+          />
+        ),
+      })}
 
       <SafeAreaView style={styles.container}>
         <ScrollView
