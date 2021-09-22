@@ -15,6 +15,12 @@ export const commonReducer = (state = initialState, action) => {
         error: action.error,
       };
 
+    case actionTypes.COMMON_SET_COLOR_SCHEME:
+      return {
+        ...state,
+        colorScheme: action.colorScheme,
+      };
+
     default:
       return state;
   }

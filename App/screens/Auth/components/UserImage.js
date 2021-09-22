@@ -4,7 +4,7 @@ import {Icon, Avatar} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {useDispatch} from 'react-redux';
-import {colors} from '../../../consts/consts';
+import {COLORS} from '../../../consts/consts';
 import * as actionsCommon from '../../../store/common/actions';
 
 const options = {
@@ -41,7 +41,7 @@ export const UserImage = ({imageUri, setImageData, width}) => {
       <Icon
         type="entypo"
         name="add-user"
-        color={colors.DARK_YELLOW}
+        color={COLORS.DARK_YELLOW}
         size={imageUri ? 25 : width}
         containerStyle={imageUri ? styles.iconWithPhoto : styles.icon}
         onPress={addPhoto}
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: colors.DARK_YELLOW,
+    color: COLORS.DARK_YELLOW,
     marginLeft: 15,
     marginTop: 10,
   },

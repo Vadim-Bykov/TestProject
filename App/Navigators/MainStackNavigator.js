@@ -1,22 +1,37 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
 import {SplashScreen} from '../screens/Splash/SplashScreen';
 import * as actionsAuth from '../store/auth/actions';
-import * as selectors from '../store/auth/selectors';
+import * as selectorsAuth from '../store/auth/selectors';
 import {TabNavigator} from './TabNavigator';
 import {StatusBar} from 'react-native';
 import {AuthStackNavigator} from './AuthStackNavigator';
-import {colors, STACK_SCREEN_OPTIONS} from '../consts/consts';
+import {STACK_SCREEN_OPTIONS} from '../consts/consts';
+import {useTheme} from '@react-navigation/native';
+import * as selectorsCommon from '../store/common/selectors';
+import {Error} from '../common/Error';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import * as utils from '../utils/utils';
 
 const Stack = createStackNavigator();
 
 export const MainStackNavigator = () => {
   const [initializing, setInitializing] = useState(true);
-  const isAuth = useSelector(selectors.getIsAuth);
+  const isAuth = useSelector(selectorsAuth.getIsAuth);
+  const {dark, colors} = useTheme();
+  const error = useSelector(selectorsCommon.getError);
 
   const dispatch = useDispatch();
+
+  useLayoutEffect(() => {
+    try {
+      changeNavigationBarColor(colors.background, !dark);
+    } catch (error) {
+      dispatch(utils.extractErrorMessage(error));
+    }
+  }, [dark]);
 
   const onAuthStateChanged = user => {
     if (user) {
@@ -37,10 +52,11 @@ export const MainStackNavigator = () => {
 
   return (
     <>
+      {error && <Error />}
       <StatusBar
         translucent
-        backgroundColor={!isAuth ? 'transparent' : colors.BLACK}
-        barStyle={!isAuth ? 'dark-content' : 'default'}
+        backgroundColor={'transparent'}
+        barStyle={!isAuth || !dark ? 'dark-content' : 'light-content'}
       />
 
       <Stack.Navigator

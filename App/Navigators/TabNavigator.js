@@ -12,6 +12,11 @@ import {
 } from 'react-native';
 import {ProfileStackNavigator} from './ProfileStackNavigator';
 import {MediaStackNavigator} from './MediaStackNavigator';
+// import {DrawerNavigator} from './DrawerNavigator';
+import {Settings} from '../screens/Settings/Settings';
+import {useTheme} from '@react-navigation/native';
+import {SavedMediaStack} from './SavedMediaStack';
+import {SavedMediaGesture} from '../screens/SavedMediaGesture/SavedMediaGesture';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -38,51 +43,86 @@ const MyText = ({children, color}) => {
 };
 
 export const TabNavigator = () => {
+  const {colors} = useTheme();
+
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
+      screenOptions={({navigation, route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
           let type;
 
           if (route.name === 'HomeTab') {
             type = 'ionicon';
-            iconName = focused
-              ? 'ios-information-circle'
-              : 'ios-information-circle-outline';
-          } else if (route.name === 'MoviesTab') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'MediaTab') {
             type = 'ionicon';
             iconName = focused ? 'ios-list' : 'ios-list-outline';
+
+            return (
+              <Icon
+                type={type}
+                name={iconName}
+                size={size}
+                color={color}
+                // onPress={navigation.navigate('MediaTab', {screen: 'Movies'})}
+              />
+            );
           } else if (route.name === 'ProfileTab') {
             type = 'font-awesome';
             iconName = focused ? 'user-circle-o' : 'user';
+          } else if (route.name === 'SettingsTab') {
+            type = 'ionicon';
+            iconName = focused ? 'settings' : 'settings-outline';
+          } else if (route.name === 'SavedMediaTab') {
+            type = 'ionicon';
+            iconName = focused ? 'save' : 'save-outline';
+          } else if (route.name === 'SavedGestureTab') {
+            type = 'antdesign';
+            iconName = focused ? 'heart' : 'hearto';
           }
 
           return <Icon type={type} name={iconName} size={size} color={color} />;
         },
         headerShown: false,
         tabBarActiveTintColor: 'tomato',
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: colors.textGray,
         tabBarLabel: ({focused, color}) => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
           switch (route.name) {
             case 'HomeTab':
               return focused && <MyText color={color}>Home</MyText>;
 
-            case 'MoviesTab':
+            case 'MediaTab':
               return focused && <MyText color={color}>Movies</MyText>;
 
             case 'ProfileTab':
               return focused && <MyText color={color}>Profile</MyText>;
+
+            case 'SettingsTab':
+              return focused && <MyText color={color}>Settings</MyText>;
+
+            case 'SavedMediaTab':
+              return focused && <MyText color={color}>Saved</MyText>;
+
+            case 'SavedGestureTab':
+              return focused && <MyText color={color}>Favorite</MyText>;
 
             default:
               null;
           }
         },
       })}>
-      <Tab.Screen name="HomeTab" component={HomeStackNavigator} />
+      <Tab.Screen name="HomeTab" component={MediaStackNavigator} />
       <Tab.Screen name="ProfileTab" component={ProfileStackNavigator} />
-      <Tab.Screen name="MoviesTab" component={MediaStackNavigator} />
+      <Tab.Screen
+        name="MediaTab"
+        component={MediaStackNavigator}
+        initialParams={{screen: 'Movies'}}
+      />
+      <Tab.Screen name="SavedMediaTab" component={SavedMediaStack} />
+      <Tab.Screen name="SavedGestureTab" component={SavedMediaGesture} />
+      <Tab.Screen name="SettingsTab" component={Settings} />
     </Tab.Navigator>
   );
 };

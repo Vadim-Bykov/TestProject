@@ -1,61 +1,82 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  ScrollView,
-  useWindowDimensions,
-} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {StyleSheet, ScrollView, Animated} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
-import {Button, Avatar} from 'react-native-elements';
-import * as firebaseService from '../../api/firebaseService';
-import {useDispatch, useSelector} from 'react-redux';
-import * as selectorsAuth from '../../store/auth/selectors';
-import * as selectorsCommon from '../../store/common/selectors';
-import {colors} from '../../consts/consts';
+import * as actionsCommon from '../../store/common/actions';
+import {useDispatch} from 'react-redux';
 import {Loader} from '../../common/Loader';
-import {Error} from '../../common/Error';
+import {useQuery, useQueryClient} from 'react-query';
+import * as tmdbService from '../../api/tmdbService';
+import * as utils from '../../utils/utils';
+import {ButtonBlock} from './components/ButtonBlock';
+import {HomePager} from './components/HomePager/HomePager';
+import {AnimatedBackdropAndroid} from './components/AnimatedBackdropAndroid';
+import {AnimatedBackdropIOS} from './components/AnimatedBackdropIOS';
+import {Platform} from 'react-native';
 
-export const HomeScreen = () => {
+export const SPACING = 10;
+
+export const HomeScreen = ({navigation}) => {
+  const queryClient = useQueryClient();
   const dispatch = useDispatch();
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const [page, setPage] = useState(1);
+  const [mediaType, setMediaType] = useState('movie');
 
-  const userData = useSelector(selectorsAuth.getUserData);
-  const isFetching = useSelector(selectorsCommon.getIsFetching);
-  const error = useSelector(selectorsCommon.getError);
+  const goToDetails = useCallback((id, mediaType) => {
+    navigation.navigate('Details', {id, mediaType});
+  }, []);
 
-  const logout = useCallback(() => dispatch(firebaseService.logout()), []);
+  const {data, error, isError, isLoading, isFetching} = useQuery(
+    ['movieData', page],
+    () => tmdbService.getMovies({mediaType, page, timeWindow: 'week'}),
+    {keepPreviousData: true},
+  );
 
-  if (!userData) return null;
+  useEffect(() => {
+    isError &&
+      dispatch(actionsCommon.setError(utils.extractErrorMessage(error)));
+  }, [isError]);
+
+  useEffect(() => {
+    queryClient.prefetchQuery(['movieData', page + 1], () =>
+      tmdbService.getMovies({mediaType, page: page + 1, timeWindow: 'week'}),
+    );
+  }, [page]);
 
   return (
     <>
-      {isFetching && <Loader />}
-      {error && <Error />}
+      {isLoading && <Loader />}
+
+      {Platform.select({
+        ios: (
+          <AnimatedBackdropIOS mediaData={data?.results} scrollX={scrollX} />
+        ),
+        android: (
+          <AnimatedBackdropAndroid
+            mediaData={data?.results}
+            scrollX={scrollX}
+          />
+        ),
+      })}
 
       <SafeAreaView style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.scrollViewContainer}
-          decelerationRate="fast"
-          showsVerticalScrollIndicator={false}>
-          <>
-            <Text style={styles.item}>Welcome {userData.email}</Text>
-            <Text style={styles.item}>Welcome {userData.displayName}</Text>
-            {userData.photoURL && (
-              <Avatar source={{uri: userData.photoURL}} rounded size={100} />
-            )}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}>
+          <HomePager
+            data={data}
+            scrollX={scrollX}
+            goToDetails={goToDetails}
+            isFetching={isFetching}
+          />
 
-            <Button
-              activeOpacity={0.6}
-              title="Logout"
-              type="outline"
-              icon={{type: 'ionicon', name: 'ios-log-out-outline'}}
-              iconRight
-              buttonStyle={{paddingRight: 15, borderColor: colors.BLACK}}
-              titleStyle={{color: colors.BLACK}}
-              onPress={logout}
-            />
-          </>
+          <ButtonBlock
+            isLoading={isLoading}
+            page={page}
+            setPage={setPage}
+            totalPages={data?.total_pages}
+          />
         </ScrollView>
       </SafeAreaView>
     </>
@@ -66,12 +87,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     // backgroundColor: 'green',
   },
+
   scrollViewContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'blue',
+    flexGrow: 1,
+    // backgroundColor: 'orange',
+    padding: SPACING,
   },
-  item: {},
 });

@@ -2,15 +2,15 @@ import React, {useCallback} from 'react';
 import {useController} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
 import {Input} from 'react-native-elements';
-import {colors} from '../consts/consts';
+import {COLORS} from '../consts/consts';
 
 export const CustomInput = React.memo(({inputConfig}) => {
   const {
-    leftIcon: {iconName, type = 'material', color = colors.DARK_YELLOW},
+    leftIcon: {iconName, type = 'material', color = COLORS.DARK_YELLOW},
     rightIcon: {
       rightIconName = '',
       rightIconType = 'material',
-      rightIconColor = colors.DARK_YELLOW,
+      rightIconColor = COLORS.DARK_YELLOW,
       onPress = () => {},
     } = {},
     width,
@@ -22,8 +22,8 @@ export const CustomInput = React.memo(({inputConfig}) => {
     rules,
     // defaultValue = '',
     label = false,
-    borderColor = colors.DARK_YELLOW,
-    textColor = colors.DARK_YELLOW,
+    borderColor = COLORS.DARK_YELLOW,
+    textColor = COLORS.DARK_YELLOW,
     editable = true,
   } = inputConfig;
 

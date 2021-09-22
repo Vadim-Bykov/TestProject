@@ -4,18 +4,17 @@ import {Button} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {colors} from '../../consts/consts';
+import {COLORS, DEFAULT_AVATAR} from '../../consts/consts';
 import * as selectorsAuth from '../../store/auth/selectors';
 import * as selectorsCommon from '../../store/common/selectors';
 import * as firebaseService from '../../api/firebaseService';
 import {Loader} from '../../common/Loader';
-import {Error} from '../../common/Error';
+import {ThemeText} from '../../common/ThemeText';
 
 export const ProfileScreen = ({navigation}) => {
   const userData = useSelector(selectorsAuth.getUserData);
   const {width} = useWindowDimensions();
   const isFetching = useSelector(selectorsCommon.getIsFetching);
-  const error = useSelector(selectorsCommon.getError);
   const dispatch = useDispatch();
 
   const logout = useCallback(() => dispatch(firebaseService.logout()), []);
@@ -25,12 +24,11 @@ export const ProfileScreen = ({navigation}) => {
   return (
     <>
       {isFetching && <Loader />}
-      {error && <Error />}
 
       <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
           <FastImage
-            source={{uri: userData.photoURL}}
+            source={{uri: userData.photoURL || DEFAULT_AVATAR}}
             style={[
               styles.userImage,
               {
@@ -40,10 +38,10 @@ export const ProfileScreen = ({navigation}) => {
             ]}
           />
 
-          <Text style={styles.description}>
+          <ThemeText style={styles.description}>
             User name: {userData.displayName}
-          </Text>
-          <Text>User email: {userData.email}</Text>
+          </ThemeText>
+          <ThemeText>User email: {userData.email}</ThemeText>
 
           <Button
             title="Edit"
@@ -106,11 +104,11 @@ const styles = StyleSheet.create({
   },
 
   btnEdit: {
-    borderColor: colors.BLUE,
+    borderColor: COLORS.BLUE,
   },
 
   btnEditTitle: {
-    color: colors.BLUE,
+    color: COLORS.BLUE,
   },
 
   btnLogout: {
