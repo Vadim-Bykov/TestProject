@@ -163,3 +163,31 @@ export const updateUserProfile = userData => async dispatch => {
     dispatch(actionsCommon.setIsFetching(false));
   }
 };
+
+export const observeCollection = (collection, onResult, onError) =>
+  firestore().collection(collection).onSnapshot(onResult, onError);
+
+export const getCollection = collection =>
+  firestore()
+    .collection(collection)
+    .orderBy('timestamp', 'desc')
+    .limit(10)
+    .get()
+    .catch(err => Promise.reject(err));
+
+export const getFirestoreData = (collection, docId) =>
+  firestore().collection(collection).doc(String(docId)).get();
+
+export const saveMediaToForums = (collection, docId, data) =>
+  firestore()
+    .collection(collection)
+    .doc(docId.toString())
+    .set(data)
+    .catch(err => Promise.reject(err));
+
+export const removeDataFromForums = (collection, docId) =>
+  firestore()
+    .collection(collection)
+    .doc(docId.toString())
+    .delete()
+    .catch(err => Promise.reject(err));

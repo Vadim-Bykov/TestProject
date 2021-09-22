@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
 import * as tmdbService from '../../../../api/tmdbService';
+import * as firebaseService from '../../../../api/firebaseService';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import * as actionsCommon from '../../../../store/common/actions';
 import {useRoute} from '@react-navigation/native';
@@ -68,12 +69,16 @@ export const SaveMediaIcon = () => {
 
       onSettled: () => {
         queryClient.invalidateQueries('savedMediaList');
+
+        isSaved
+          ? firebaseService.saveMediaToForums(id, {forumCreator: 'userId'})
+          : null;
       },
     },
   );
 
   return (
-    <>
+    <View>
       <Icon
         type="ionicon"
         name={isSaved ? 'save' : 'save-outline'}
@@ -83,7 +88,7 @@ export const SaveMediaIcon = () => {
         onPress={mutateList.mutate}
       />
       <Text>{isSaved ? 'Saved' : 'Save'}</Text>
-    </>
+    </View>
   );
 };
 

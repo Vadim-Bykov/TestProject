@@ -17,6 +17,7 @@ import {Settings} from '../screens/Settings/Settings';
 import {useTheme} from '@react-navigation/native';
 import {SavedMediaStack} from './SavedMediaStack';
 import {SavedMediaGesture} from '../screens/SavedMediaGesture/SavedMediaGesture';
+import {ForumStackNavigator} from './ForumStackNavigator';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -80,6 +81,9 @@ export const TabNavigator = () => {
           } else if (route.name === 'SavedGestureTab') {
             type = 'antdesign';
             iconName = focused ? 'heart' : 'hearto';
+          } else if (route.name === 'ForumsTab') {
+            type = 'material-community';
+            iconName = focused ? 'forum' : 'forum-outline';
           }
 
           return <Icon type={type} name={iconName} size={size} color={color} />;
@@ -108,6 +112,9 @@ export const TabNavigator = () => {
             case 'SavedGestureTab':
               return focused && <MyText color={color}>Favorite</MyText>;
 
+            case 'ForumsTab':
+              return focused && <MyText color={color}>Forums</MyText>;
+
             default:
               null;
           }
@@ -122,6 +129,7 @@ export const TabNavigator = () => {
       />
       <Tab.Screen name="SavedMediaTab" component={SavedMediaStack} />
       <Tab.Screen name="SavedGestureTab" component={SavedMediaGesture} />
+      <Tab.Screen name="ForumsTab" component={ForumStackNavigator} />
       <Tab.Screen name="SettingsTab" component={Settings} />
     </Tab.Navigator>
   );

@@ -3,6 +3,7 @@ import React, {useLayoutEffect, useRef} from 'react';
 import {StyleSheet, Text, Animated} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {COLORS} from '../../../../consts/consts';
+import {SaveFirestore} from './SaveFirestore';
 import {SaveMediaIcon} from './SaveMediaIcon';
 
 export const StarBlock = ({width, mediaDetails}) => {
@@ -53,6 +54,10 @@ export const StarBlock = ({width, mediaDetails}) => {
 
       <Animated.View style={[styles.voteAverage, {transform: [{scale}]}]}>
         <SaveMediaIcon />
+      </Animated.View>
+
+      <Animated.View style={[styles.voteAverage, {transform: [{scale}]}]}>
+        <SaveFirestore mediaDetails={mediaDetails} />
       </Animated.View>
     </Animated.View>
   );
