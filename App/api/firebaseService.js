@@ -165,13 +165,17 @@ export const updateUserProfile = userData => async dispatch => {
 };
 
 export const observeCollection = (collection, onResult, onError) =>
-  firestore().collection(collection).onSnapshot(onResult, onError);
+  firestore()
+    .collection(collection)
+    .orderBy('timestamp', 'desc')
+    .limit(20)
+    .onSnapshot(onResult, onError);
 
 export const getCollection = collection =>
   firestore()
     .collection(collection)
     .orderBy('timestamp', 'desc')
-    .limit(10)
+    .limit(15)
     .get()
     .catch(err => Promise.reject(err));
 

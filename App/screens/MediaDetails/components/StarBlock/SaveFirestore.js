@@ -17,8 +17,6 @@ export const SaveFirestore = React.memo(({mediaDetails}) => {
   const userData = useSelector(selectorsCommon.getUserData);
   const {mediaType, id} = useRoute().params;
 
-  console.log(mediaDetails);
-
   const title = useMemo(
     () => (mediaType === 'movie' ? mediaDetails.title : mediaDetails.name),
     [],

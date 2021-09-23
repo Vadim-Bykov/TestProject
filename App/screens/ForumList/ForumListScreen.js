@@ -1,41 +1,41 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {Animated, StyleSheet, useWindowDimensions} from 'react-native';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch} from 'react-redux';
 import * as firebaseService from '../../api/firebaseService';
 import * as actionsCommon from '../../store/common/actions';
 import * as utils from '../../utils/utils';
+import {ForumListItem} from './components/ForumListItem';
+import {useTheme} from '@react-navigation/native';
 
-export const ForumListScreen = () => {
+export const SPACING = 5;
+
+export const ForumListScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const [forums, setForums] = useState([]);
+  const {width, height} = useWindowDimensions();
+  const {colors} = useTheme();
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const {bottom, top} = useSafeAreaInsets();
 
-  useEffect(async () => {
-    try {
-      const forums = [];
-      const querySnapshot = await firebaseService.getCollection('forums');
-      if (querySnapshot.empty) return;
-      querySnapshot.forEach(document => forums.push(document.data()));
+  const WINDOW_LIST_HEIGHT = height - bottom - top - 50;
+  const ITEMS_COUNT = Math.round(WINDOW_LIST_HEIGHT / 80);
+  const ITEM_HEIGHT = Math.floor(WINDOW_LIST_HEIGHT / ITEMS_COUNT);
 
-      setForums(forums);
-    } catch (error) {
-      dispatch(actionsCommon);
-    }
+  const goToForum = useCallback((docId, title) => {
+    navigation.navigate('Forum', {docId, title});
   }, []);
 
   const onResult = useCallback(querySnapshot => {
-    // if (querySnapshot.empty) return;
-    //    querySnapshot.forEach(document => forums.push(document.data()));
-    console.log('onResult', querySnapshot.docs);
+    const tempStore = [];
+    if (querySnapshot.empty) return;
 
-    querySnapshot.docs.forEach(document =>
-      console.log('onResult', document.data()),
-    );
-    // setForums(forums);
+    querySnapshot.docs.forEach(document => tempStore.push(document.data()));
+    setForums(tempStore);
   }, []);
 
   const onError = useCallback(error => {
-    console.log('onError', error);
+    dispatch(actionsCommon.setError(utils.extractErrorMessage(error)));
   }, []);
 
   useEffect(() => {
@@ -48,11 +48,56 @@ export const ForumListScreen = () => {
     return subscriber;
   }, []);
 
+  const getItemLayout = useCallback(
+    (data, index) => ({
+      length: ITEM_HEIGHT,
+      offset: ITEM_HEIGHT * index,
+      index,
+    }),
+    [],
+  );
+
+  const renderItem = useCallback(
+    ({item, index}) => {
+      return (
+        <ForumListItem
+          item={item}
+          index={index}
+          width={width}
+          themeColors={colors}
+          scrollY={scrollY}
+          WINDOW_LIST_HEIGHT={WINDOW_LIST_HEIGHT}
+          ITEM_HEIGHT={ITEM_HEIGHT}
+          goToForum={goToForum}
+        />
+      );
+    },
+    [width, colors, WINDOW_LIST_HEIGHT, ITEM_HEIGHT],
+  );
+
   console.log(forums);
 
+  const onScroll = useMemo(
+    () =>
+      Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {
+        useNativeDriver: true,
+      }),
+    [scrollY],
+  );
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>ForumListScreen</Text>
+    <SafeAreaView style={[styles.container, {marginBottom: -bottom}]}>
+      <Animated.FlatList
+        data={forums}
+        keyExtractor={item => `forum${item.documentId}`}
+        renderItem={renderItem}
+        snapToInterval={ITEM_HEIGHT}
+        decelerationRate={'fast'}
+        getItemLayout={getItemLayout}
+        showsVerticalScrollIndicator={false}
+        onScroll={onScroll}
+        bounces={false}
+      />
     </SafeAreaView>
   );
 };
@@ -60,7 +105,6 @@ export const ForumListScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: SPACING,
   },
 });
