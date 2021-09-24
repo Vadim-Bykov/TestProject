@@ -40,7 +40,7 @@ export const COLORS_LIGHT_THEME = {
     text: 'rgb(28, 28, 30)',
     textGray: '#6A6A6A',
     backgroundGray: '#EBEBEB',
-    // backgroundBlue: '#CDE6FF',
+    backgroundBlue: '#CDE6FF',
   },
 };
 
@@ -55,6 +55,6 @@ export const COLORS_DARK_THEME = {
     text: 'rgb(229, 229, 231)',
     textGray: '#A1A1A1',
     backgroundGray: '#BFBFBF',
-    // backgroundBlue: '#ABD2FF',
+    backgroundBlue: '#ABD2FF',
   },
 };

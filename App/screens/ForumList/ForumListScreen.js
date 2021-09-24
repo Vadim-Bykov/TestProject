@@ -22,8 +22,8 @@ export const ForumListScreen = ({navigation}) => {
   const ITEMS_COUNT = Math.round(WINDOW_LIST_HEIGHT / 80);
   const ITEM_HEIGHT = Math.floor(WINDOW_LIST_HEIGHT / ITEMS_COUNT);
 
-  const goToForum = useCallback((docId, title) => {
-    navigation.navigate('Forum', {docId, title});
+  const goToForum = useCallback((forumId, title, posterUrl) => {
+    navigation.navigate('Forum', {forumId, title, posterUrl});
   }, []);
 
   const onResult = useCallback(querySnapshot => {

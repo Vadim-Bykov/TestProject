@@ -180,7 +180,11 @@ export const getCollection = collection =>
     .catch(err => Promise.reject(err));
 
 export const getFirestoreData = (collection, docId) =>
-  firestore().collection(collection).doc(String(docId)).get();
+  firestore()
+    .collection(collection)
+    .doc(String(docId))
+    .get()
+    .catch(err => Promise.reject(err));
 
 export const saveMediaToForums = (collection, docId, data) =>
   firestore()
@@ -195,3 +199,61 @@ export const removeDataFromForums = (collection, docId) =>
     .doc(docId.toString())
     .delete()
     .catch(err => Promise.reject(err));
+
+const addDocumentId = (collection, docId) =>
+  firestore()
+    .collection(collection)
+    .doc(docId)
+    .update({docId})
+    .catch(err => Promise.reject(err));
+
+const createLikesDocument = (collection, messageId, forumId) =>
+  firestore()
+    .collection(collection)
+    .doc(messageId)
+    .set({
+      count: 0,
+      messageId,
+      forumId,
+      userIds: [],
+    })
+    .catch(err => Promise.reject(err));
+
+export const addMessage = (message, forumId, userId) =>
+  firestore()
+    .collection('messages')
+    .add({
+      message,
+      forumId,
+      userId,
+      timestamp: Date.now(),
+    })
+    .then(message =>
+      Promise.all([
+        addDocumentId('messages', message.id),
+        createLikesDocument('likes', message.id, forumId),
+        createLikesDocument('dislikes', message.id, forumId),
+      ]),
+    )
+    .catch(err => Promise.reject(err));
+
+export const getCollectionItems = (collection, targetField, targetId) =>
+  firestore()
+    .collection(collection)
+    .where(targetField, '==', targetId)
+    .get()
+    .catch(err => Promise.reject(err));
+
+export const observeCollectionItems = (
+  collection,
+  targetField,
+  targetId,
+  onResult,
+  onError,
+) =>
+  firestore()
+    .collection(collection)
+    .where(targetField, '==', targetId)
+    .limit(15)
+    // .orderBy('timestamp', 'asc')
+    .onSnapshot(onResult, onError);

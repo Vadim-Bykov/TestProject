@@ -62,3 +62,6 @@ export const getHomePagerDimensions = () => {
     isLandScape,
   };
 };
+
+export const sortByTime = arr =>
+  arr.sort((prev, next) => prev.timestamp - next.timestamp);
