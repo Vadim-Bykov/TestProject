@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {DEFAULT_AVATAR} from '../../../../consts/consts';
@@ -7,9 +7,11 @@ import * as utils from '../../../../utils/utils';
 import * as actionsCommon from '../../../../store/common/actions';
 import * as selectorsCommon from '../../../../store/auth/selectors';
 import {useDispatch} from 'react-redux';
+import {ComponentWithContextMenu} from './ComponentWithContextMenu';
+import {MessageContent} from './MessageContent';
 
-const USER_PHOTO_WIDTH = 45;
-const SPACING_HORIZONTAL = 10;
+export const USER_PHOTO_WIDTH = 45;
+export const SPACING_HORIZONTAL = 10;
 
 export const MessageItem = React.memo(
   ({
@@ -25,6 +27,7 @@ export const MessageItem = React.memo(
     const [creatorData, setCreatorData] = useState(null);
 
     const isOwner = currentUserId === item.userId;
+
     const isShowPhoto = useMemo(
       () =>
         index === 0 || messages[index].userId !== messages[index - 1].userId,
@@ -48,6 +51,17 @@ export const MessageItem = React.memo(
       }
     }, []);
 
+    const removeDataMessage = useCallback(() => {
+      try {
+        firebaseService.removeDocument('messages', item.docId);
+        firebaseService.removeDocument('likes', item.docId);
+        firebaseService.removeDocument('dislikes', item.docId);
+      } catch (error) {
+        dispatch(actionsCommon.setError(utils.extractErrorMessage(error)));
+      } finally {
+      }
+    }, []);
+
     return (
       <View
         style={[
@@ -68,21 +82,16 @@ export const MessageItem = React.memo(
           />
         )}
 
-        <View
-          style={[
-            styles.contentContainer,
-            {
-              width: width - USER_PHOTO_WIDTH * 2,
-              backgroundColor: isOwner
-                ? themeColors.backgroundBlue
-                : themeColors.backgroundGray,
-              flexDirection: isOwner ? 'row-reverse' : 'row',
-              borderTopLeftRadius: !isOwner && isShowPhoto ? 0 : 5,
-              borderTopRightRadius: isOwner && isShowPhoto ? 0 : 5,
-            },
-          ]}>
-          <Text>{item.message}</Text>
-        </View>
+        <ComponentWithContextMenu
+          message={item.message}
+          // docId={item.docId}
+          width={width}
+          themeColors={themeColors}
+          isOwner={isOwner}
+          isShowPhoto={isShowPhoto}
+          removeData={removeDataMessage}
+          AnchorComponent={MessageContent}
+        />
       </View>
     );
   },
@@ -99,11 +108,5 @@ const styles = StyleSheet.create({
     width: USER_PHOTO_WIDTH,
     height: USER_PHOTO_WIDTH,
     borderRadius: 10,
-  },
-
-  contentContainer: {
-    padding: 10,
-    marginHorizontal: SPACING_HORIZONTAL / 2,
-    borderRadius: 5,
   },
 });

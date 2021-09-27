@@ -46,6 +46,7 @@ export const ForumStackNavigator = () => {
               })}
             />
           ),
+          headerRightContainerStyle: {paddingRight: 10},
         })}
       />
     </Stack.Navigator>

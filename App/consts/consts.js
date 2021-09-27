@@ -25,6 +25,7 @@ export const COLORS = {
   WHITE: '#ffffff',
   DARK_YELLOW: '#DDBA33',
   BLUE: '#1F80D3',
+  PRIMARY: 'rgb(0, 122, 255)',
   BG_TRANSPARENT_GRAY: 'rgba(0,0,0, 0.4)',
   BG_GENERAL: '#F0F0F0',
 };

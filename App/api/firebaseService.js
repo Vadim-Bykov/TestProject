@@ -257,3 +257,32 @@ export const observeCollectionItems = (
     .limit(15)
     // .orderBy('timestamp', 'asc')
     .onSnapshot(onResult, onError);
+
+export const removeDocument = (collection, docId) => {
+  console.log(collection, docId);
+  return firestore()
+    .collection(collection)
+    .doc(docId)
+    .delete()
+    .catch(err => Promise.reject(err));
+};
+
+export const massDocsDelete = async (collection, documentId, targetField) => {
+  try {
+    const usersQuerySnapshot = await firestore()
+      .collection(collection)
+      .where(targetField, '==', documentId)
+      .get();
+
+    const batch = firestore().batch();
+
+    usersQuerySnapshot.forEach(documentSnapshot => {
+      batch.delete(documentSnapshot.ref);
+    });
+
+    return batch.commit();
+  } catch (error) {
+    // console.error(error);
+    return Promise.reject(error);
+  }
+};

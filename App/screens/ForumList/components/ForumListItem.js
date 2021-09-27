@@ -43,7 +43,7 @@ export const ForumListItem = React.memo(
     const [creatorData, setCreatorData] = useState(null);
 
     const goToForumScreen = useCallback(() => {
-      goToForum(item.documentId, item.title, item.posterUrl);
+      goToForum(item.documentId, item.title, item.posterUrl, item.creatorId);
     }, []);
 
     const CONTENT_HEIGHT = ITEM_HEIGHT - SPACING * 2;

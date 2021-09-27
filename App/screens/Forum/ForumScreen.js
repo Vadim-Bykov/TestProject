@@ -1,17 +1,23 @@
-import React, {useEffect, useState, useRef, useCallback} from 'react';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+} from 'react';
 import {
   Animated,
   StyleSheet,
-  Text,
   View,
   KeyboardAvoidingView,
   FlatList,
   useWindowDimensions,
   Keyboard,
+  Platform,
 } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTheme} from '@react-navigation/native';
 import {BASE_IMAGE_URL, COLORS, DEFAULT_MOVIE_IMAGE} from '../../consts/consts';
@@ -21,18 +27,50 @@ import * as actionsCommon from '../../store/common/actions';
 import * as selectorsCommon from '../../store/auth/selectors';
 import {MessageInput} from './components/MessageInput';
 import {MessageItem} from './components/Message/MessageItem';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {DeleteForum} from './components/DeleteForum';
+import {ComponentWithContextMenu} from './components/Message/ComponentWithContextMenu';
 
-const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
-
-export const ForumScreen = ({route}) => {
+export const ForumScreen = ({navigation, route}) => {
   const dispatch = useDispatch;
   const [messages, setMessages] = useState();
   const userData = useSelector(selectorsCommon.getUserData);
-  const {forumId, posterUrl} = route.params;
+  const {forumId, posterUrl, creatorId} = route.params;
   const {colors, dark} = useTheme();
   const {height, width} = useWindowDimensions();
   const bgScale = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
+
+  const isForumOwner = useMemo(() => creatorId === userData.uid, []);
+
+  const removeForum = useCallback(async () => {
+    try {
+      // firebaseService.removeDocument('forums', forumId);
+      firebaseService.massDocsDelete('messages', forumId, 'forumId');
+      firebaseService.massDocsDelete('likes', forumId, 'forumId');
+      firebaseService.massDocsDelete('dislikes', forumId, 'forumId');
+    } catch (error) {
+      dispatch(actionsCommon.setError(utils.extractErrorMessage(error)));
+    } finally {
+      navigation.goBack();
+    }
+    console.log('Forum delete.');
+  }, []);
+
+  useLayoutEffect(() => {
+    if (isForumOwner) {
+      navigation.setOptions({
+        headerRight: () => (
+          <ComponentWithContextMenu
+            isOwner={isForumOwner}
+            removeData={removeForum}
+            AnchorComponent={DeleteForum}
+          />
+        ),
+      });
+    }
+  }, []);
 
   const animateBackground = useCallback(() => {
     Animated.spring(bgScale, {
@@ -68,14 +106,18 @@ export const ForumScreen = ({route}) => {
     return subscriber;
   }, []);
 
+  const scrollToEnd = useCallback(() => {
+    messages?.length && flatListRef?.current?.scrollToEnd();
+  }, [flatListRef, messages]);
+
   useEffect(() => {
     const subscriber = Keyboard.addListener('keyboardDidShow', () => {
-      setTimeout(() => flatListRef.current.scrollToEnd(), 500);
+      setTimeout(scrollToEnd, 500);
       // flatListRef.current.scrollToEnd()
     });
 
     return subscriber.remove;
-  }, [flatListRef]);
+  }, [flatListRef, messages]);
 
   const renderItem = useCallback(
     ({item, index}) => {
@@ -94,8 +136,16 @@ export const ForumScreen = ({route}) => {
     [width, messages, dark],
   );
 
+  // const {bottom} = useSafeAreaInsets();
+  const tabBarHeight = useBottomTabBarHeight();
+
   return (
     <>
+      {/* <KeyboardAvoidingView
+        style={[styles.container]}
+        behavior="padding"
+        keyboardVerticalOffset={tabBarHeight + 13}
+        enabled={Platform.select({ios: true, android: false})}> */}
       <Animated.Image
         source={{
           uri: posterUrl
@@ -112,20 +162,20 @@ export const ForumScreen = ({route}) => {
         style={styles.linearGradient}
       />
 
-      <View style={styles.container}>
-        <FlatList
-          ref={flatListRef}
-          data={messages}
-          keyExtractor={item => item.docId}
-          renderItem={renderItem}
-          contentContainerStyle={styles.flatListContainer}
-          showsVerticalScrollIndicator={false}
-        />
+      <FlatList
+        ref={flatListRef}
+        data={messages}
+        keyExtractor={item => item.timestamp.toString()}
+        renderItem={renderItem}
+        contentContainerStyle={styles.flatListContainer}
+        showsVerticalScrollIndicator={false}
+        onContentSizeChange={scrollToEnd}
+      />
 
-        {/* <KeyboardAvoidingView> */}
-        <MessageInput forumId={forumId} userId={userData?.uid} />
-        {/* </KeyboardAvoidingView> */}
-      </View>
+      <MessageInput forumId={forumId} userId={userData?.uid} />
+      {/* </View> */}
+      {/* </KeyboardAvoidingView> */}
+      {Platform.OS === 'ios' && <KeyboardSpacer topSpacing={-tabBarHeight} />}
     </>
   );
 };
@@ -142,8 +192,6 @@ const styles = StyleSheet.create({
 
   flatListContainer: {
     flexGrow: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
   },
 
   linearGradient: {
