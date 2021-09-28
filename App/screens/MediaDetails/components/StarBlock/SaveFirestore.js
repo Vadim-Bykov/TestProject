@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import * as firebaseService from '../../../../api/firebaseService';
@@ -13,7 +13,7 @@ export const SaveFirestore = React.memo(({mediaDetails}) => {
   const dispatch = useDispatch();
   const [disabled, setDisabled] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
-  const [page, setPage] = useState(1);
+  const [isOwner, setIsOwner] = useState(true);
   const userData = useSelector(selectorsCommon.getUserData);
   const {mediaType, id} = useRoute().params;
 
@@ -25,6 +25,10 @@ export const SaveFirestore = React.memo(({mediaDetails}) => {
   useEffect(async () => {
     try {
       const res = await firebaseService.getFirestoreData('forums', id);
+
+      if (res.exists) {
+        setIsOwner(res.data().creatorId === userData?.uid);
+      }
 
       setIsSaved(res.exists);
     } catch (error) {
@@ -60,6 +64,11 @@ export const SaveFirestore = React.memo(({mediaDetails}) => {
       setDisabled(true);
       firebaseService
         .removeDocument('forums', id.toString())
+        .then(() => {
+          firebaseService.massDocsDelete('messages', id.toString(), 'forumId');
+          firebaseService.massDocsDelete('likes', id.toString(), 'forumId');
+          firebaseService.massDocsDelete('dislikes', id.toString(), 'forumId');
+        })
         .then(() => setIsSaved(false));
     } catch (error) {
       dispatch(actionsCommon.setError(utils.extractErrorMessage(error)));
@@ -68,23 +77,35 @@ export const SaveFirestore = React.memo(({mediaDetails}) => {
     }
   }, []);
 
+  const warnBeforeRemoving = useCallback(() => {
+    Alert.alert(
+      'Removing from forums',
+      "Are you sure? You'll remove all forum messages as well!",
+      [{text: 'Cancel'}, {text: 'Yes', onPress: removeForum}],
+    );
+  }, []);
+
   return (
     <View>
       <Icon
         type="ionicon"
         name={isSaved ? 'save' : 'save-outline'}
         color="tomato"
-        disabled={disabled}
+        disabled={disabled || !isOwner}
         disabledStyle={styles.disabledStyle}
-        onPress={isSaved ? removeForum : createForum}
+        onPress={isSaved ? warnBeforeRemoving : createForum}
       />
-      <Text>{isSaved ? 'Saved' : 'Save'}</Text>
+      {isOwner ? (
+        <Text>{isSaved ? 'Saved' : 'Save'}</Text>
+      ) : (
+        <Text>You aren't creator</Text>
+      )}
     </View>
   );
 });
 
 const styles = StyleSheet.create({
   disabledStyle: {
-    backgroundColor: COLORS.BG_TRANSPARENT_GRAY,
+    backgroundColor: COLORS.WHITE,
   },
 });
