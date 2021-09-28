@@ -1,9 +1,21 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {COLORS} from '../../../../consts/consts';
+import {LikeComponent} from './LikeComponent';
 import {SPACING_HORIZONTAL, USER_PHOTO_WIDTH} from './MessageItem';
 
 export const MessageContent = React.memo(
-  ({message, width, themeColors, showMenu, isOwner, isShowPhoto}) => {
+  ({
+    message,
+    messageId,
+    width,
+    themeColors,
+    showMenu,
+    isOwner,
+    currentUserId,
+    isShowPhoto,
+    messageTime,
+  }) => {
     return (
       <TouchableOpacity
         onPress={showMenu}
@@ -21,6 +33,16 @@ export const MessageContent = React.memo(
           },
         ]}>
         <Text>{message}</Text>
+
+        <View style={styles.bottomBLock}>
+          <LikeComponent
+            messageId={messageId}
+            currentUserId={currentUserId}
+            isOwner={isOwner}
+          />
+
+          <Text style={styles.timeMessage}>{messageTime}</Text>
+        </View>
       </TouchableOpacity>
     );
   },
@@ -28,9 +50,20 @@ export const MessageContent = React.memo(
 
 const styles = StyleSheet.create({
   contentContainer: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingTop: 10,
     marginHorizontal: SPACING_HORIZONTAL / 2,
     borderRadius: 5,
+  },
+
+  bottomBLock: {
     flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginTop: 5,
+  },
+
+  timeMessage: {
+    fontSize: 12,
+    color: COLORS.GRAY,
   },
 });

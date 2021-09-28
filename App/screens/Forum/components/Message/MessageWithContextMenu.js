@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
 
-export const ComponentWithContextMenu = props => {
+export const MessageWithContextMenu = props => {
   const [visible, setVisible] = useState(false);
   const {isOwner} = props;
   const {AnchorComponent, removeData, ...restProps} = props;

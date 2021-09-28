@@ -28,7 +28,7 @@ import {MessageItem} from './components/Message/MessageItem';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {DeleteForum} from './components/DeleteForum';
-import {ComponentWithContextMenu} from './components/Message/ComponentWithContextMenu';
+import {MessageWithContextMenu} from './components/Message/MessageWithContextMenu';
 
 export const ForumScreen = ({navigation, route}) => {
   const dispatch = useDispatch;
@@ -36,7 +36,7 @@ export const ForumScreen = ({navigation, route}) => {
   const userData = useSelector(selectorsCommon.getUserData);
   const {forumId, posterUrl, creatorId} = route.params;
   const {colors, dark} = useTheme();
-  const {height, width} = useWindowDimensions();
+  const {width} = useWindowDimensions();
   const bgScale = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
 
@@ -59,7 +59,7 @@ export const ForumScreen = ({navigation, route}) => {
     if (isForumOwner) {
       navigation.setOptions({
         headerRight: () => (
-          <ComponentWithContextMenu
+          <MessageWithContextMenu
             isOwner={isForumOwner}
             removeData={removeForum}
             AnchorComponent={DeleteForum}

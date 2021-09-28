@@ -247,7 +247,7 @@ export const observeCollectionItems = (
   firestore()
     .collection(collection)
     .where(targetField, '==', targetId)
-    .limit(15)
+    .limit(25)
     // .orderBy('timestamp', 'asc')
     .onSnapshot(onResult, onError);
 
@@ -277,3 +277,13 @@ export const massDocsDelete = async (collection, documentId, targetField) => {
     return Promise.reject(error);
   }
 };
+
+export const observeDocument = (collection, docId, onResult, onError) =>
+  firestore().collection(collection).doc(docId).onSnapshot(onResult, onError);
+
+export const updateField = (collection, docId, data) =>
+  firestore()
+    .collection(collection)
+    .doc(docId)
+    .update(data)
+    .catch(err => Promise.reject(err));

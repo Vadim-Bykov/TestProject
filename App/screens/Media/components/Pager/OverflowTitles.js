@@ -1,11 +1,10 @@
 import React from 'react';
-import {StyleSheet, Text, View, Animated} from 'react-native';
+import {StyleSheet, View, Animated} from 'react-native';
 import {ThemeText} from '../../../../common/ThemeText';
 
 const OVERFLOW_HEIGHT = 50;
 
 export const OverflowTitles = ({mediaDate, scroll, itemWidth}) => {
-  // const inputRange = [-1, 0, 1];
   const inputRange = [-itemWidth, 0, itemWidth];
 
   const translateY = scroll.interpolate({
@@ -17,7 +16,11 @@ export const OverflowTitles = ({mediaDate, scroll, itemWidth}) => {
     <View style={styles.overflowItemsContainer}>
       <Animated.View style={{transform: [{translateY}]}}>
         {mediaDate.map((item, index) => {
-          const title = item.media_type === 'movie' ? item.title : item.name;
+          const title = !!item.media_type
+            ? item.media_type === 'movie'
+              ? item.title
+              : item.name
+            : item.title || item.name;
 
           const inputRange = [
             -itemWidth,
@@ -43,9 +46,9 @@ export const OverflowTitles = ({mediaDate, scroll, itemWidth}) => {
               key={index}
               style={[styles.overflowItem, {opacity, transform: [{scale}]}]}>
               <ThemeText style={styles.title}>
-                {title.length > 16
-                  ? `${title.slice(0, 15).toUpperCase()}...`
-                  : title.toUpperCase()}
+                {title?.length > 16
+                  ? `${title?.slice(0, 15).toUpperCase()}...`
+                  : title?.toUpperCase()}
               </ThemeText>
             </Animated.View>
           );

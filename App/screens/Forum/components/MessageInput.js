@@ -13,6 +13,7 @@ export const MessageInput = ({forumId, userId}) => {
   const {control, handleSubmit, reset} = useForm();
   const dispatch = useDispatch();
   const [fieldValue, setFieldValue] = useState('');
+  const [disabled, setDisabled] = useState(false);
 
   const {field, fieldState, formState} = useController({
     control,
@@ -26,11 +27,14 @@ export const MessageInput = ({forumId, userId}) => {
   useEffect(() => setFieldValue(field.value?.trim()), [field.value]);
 
   const submitMessage = useCallback(async ({message}) => {
+    setDisabled(true);
     try {
       await firebaseService.addMessage(message, forumId, userId);
       reset();
     } catch (error) {
       dispatch(actionsCommon.setError(utils.extractErrorMessage(error)));
+    } finally {
+      setDisabled(false);
     }
   }, []);
 
@@ -48,6 +52,7 @@ export const MessageInput = ({forumId, userId}) => {
             type="ionicon"
             name="send"
             color="violet"
+            disabled={disabled}
             onPress={handleSubmit(submitMessage)}
           />
         ) : (

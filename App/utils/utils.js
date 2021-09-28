@@ -65,3 +65,5 @@ export const getHomePagerDimensions = () => {
 
 export const sortByTime = arr =>
   arr.sort((prev, next) => prev.timestamp - next.timestamp);
+
+export const getIsIncludeArray = (array, id) => array.some(item => item === id);

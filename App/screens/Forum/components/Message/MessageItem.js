@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {DEFAULT_AVATAR} from '../../../../consts/consts';
 import * as firebaseService from '../../../../api/firebaseService';
 import * as utils from '../../../../utils/utils';
 import * as actionsCommon from '../../../../store/common/actions';
 import {useDispatch} from 'react-redux';
-import {ComponentWithContextMenu} from './ComponentWithContextMenu';
+import {MessageWithContextMenu} from './MessageWithContextMenu';
 import {MessageContent} from './MessageContent';
 
 export const USER_PHOTO_WIDTH = 45;
@@ -61,41 +61,87 @@ export const MessageItem = React.memo(
       }
     }, [item.docId]);
 
+    // console.log(new Date(messages[index].timestamp).getHours());
+    // console.log(new Date(messages[index].timestamp).getMinutes());
+
+    const hours = new Date(messages[index].timestamp).getHours();
+    const minutes = new Date(messages[index].timestamp).getMinutes();
+
+    const messageTime = useMemo(
+      () =>
+        `${hours.toString().length === 1 ? `0${hours}` : hours}:${
+          minutes.toString().length === 1 ? `0${minutes}` : minutes
+        }`,
+      [],
+    );
+
+    const isToday = useMemo(
+      () =>
+        new Date().getDate() === new Date().getDate(messages[index].timestamp),
+      [],
+    );
+
+    const date = useMemo(
+      () => new Date(messages[index].timestamp).toLocaleDateString(),
+      [],
+    );
+
+    const isShowDate = useMemo(
+      () =>
+        index === 0 ||
+        new Date(messages[index].timestamp).getDate() !==
+          new Date(messages[index - 1].timestamp).getDate(),
+      [],
+    );
+
     return (
-      <View
-        style={[
-          styles.container,
-          {
-            flexDirection: isOwner ? 'row-reverse' : 'row',
-            marginLeft: isShowPhoto ? 0 : USER_PHOTO_WIDTH,
-          },
-        ]}>
-        {isShowPhoto && (
-          <FastImage
-            source={{
-              uri: isOwner
-                ? currentUserPhotoUrl
-                : creatorData?.photoURL || (creatorData && DEFAULT_AVATAR),
-            }}
-            style={styles.userPhoto}
-          />
+      <>
+        {isShowDate && (
+          <Text style={styles.date}>{isToday ? 'Today' : date}</Text>
         )}
 
-        <ComponentWithContextMenu
-          message={item.message}
-          width={width}
-          themeColors={themeColors}
-          isOwner={isOwner}
-          isShowPhoto={isShowPhoto}
-          removeData={removeDataMessage}
-          AnchorComponent={MessageContent}
-        />
-      </View>
+        <View
+          style={[
+            styles.container,
+            {
+              flexDirection: isOwner ? 'row-reverse' : 'row',
+              marginLeft: isShowPhoto ? 0 : USER_PHOTO_WIDTH,
+            },
+          ]}>
+          {isShowPhoto && (
+            <FastImage
+              source={{
+                uri: isOwner
+                  ? currentUserPhotoUrl
+                  : creatorData?.photoURL || (creatorData && DEFAULT_AVATAR),
+              }}
+              style={styles.userPhoto}
+            />
+          )}
+
+          <MessageWithContextMenu
+            message={item.message}
+            messageId={item.docId}
+            width={width}
+            themeColors={themeColors}
+            currentUserId={currentUserId}
+            isOwner={isOwner}
+            isShowPhoto={isShowPhoto}
+            messageTime={messageTime}
+            removeData={removeDataMessage}
+            AnchorComponent={MessageContent}
+          />
+        </View>
+      </>
     );
   },
 );
 
 const styles = StyleSheet.create({
+  date: {
+    alignSelf: 'center',
+  },
+
   container: {
     paddingHorizontal: SPACING_HORIZONTAL,
     marginVertical: 5,
