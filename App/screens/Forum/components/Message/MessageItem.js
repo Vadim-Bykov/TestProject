@@ -1,11 +1,10 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {DEFAULT_AVATAR} from '../../../../consts/consts';
 import * as firebaseService from '../../../../api/firebaseService';
 import * as utils from '../../../../utils/utils';
 import * as actionsCommon from '../../../../store/common/actions';
-import * as selectorsCommon from '../../../../store/auth/selectors';
 import {useDispatch} from 'react-redux';
 import {ComponentWithContextMenu} from './ComponentWithContextMenu';
 import {MessageContent} from './MessageContent';
@@ -31,7 +30,7 @@ export const MessageItem = React.memo(
     const isShowPhoto = useMemo(
       () =>
         index === 0 || messages[index].userId !== messages[index - 1].userId,
-      [],
+      [index],
     );
 
     useEffect(async () => {
@@ -60,7 +59,7 @@ export const MessageItem = React.memo(
         dispatch(actionsCommon.setError(utils.extractErrorMessage(error)));
       } finally {
       }
-    }, []);
+    }, [item.docId]);
 
     return (
       <View
@@ -84,7 +83,6 @@ export const MessageItem = React.memo(
 
         <ComponentWithContextMenu
           message={item.message}
-          // docId={item.docId}
           width={width}
           themeColors={themeColors}
           isOwner={isOwner}
@@ -101,7 +99,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: SPACING_HORIZONTAL,
     marginVertical: 5,
-    //  backgroundColor: 'blue',
   },
 
   userPhoto: {

@@ -1,10 +1,9 @@
 import {
   CardStyleInterpolators,
   createStackNavigator,
-  HeaderStyleInterpolators,
 } from '@react-navigation/stack';
 import React from 'react';
-import {View, Text, Platform} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {colors, Icon} from 'react-native-elements';
 import {ForumScreen} from '../screens/Forum/ForumScreen';
 import {ForumListScreen} from '../screens/ForumList/ForumListScreen';
@@ -46,9 +45,15 @@ export const ForumStackNavigator = () => {
               })}
             />
           ),
-          headerRightContainerStyle: {paddingRight: 10},
+          headerRightContainerStyle: styles.headerRightContainer,
         })}
       />
     </Stack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  headerRightContainer: {
+    paddingRight: 10,
+  },
+});

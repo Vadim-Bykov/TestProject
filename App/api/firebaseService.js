@@ -193,13 +193,6 @@ export const saveMediaToForums = (collection, docId, data) =>
     .set(data)
     .catch(err => Promise.reject(err));
 
-export const removeDataFromForums = (collection, docId) =>
-  firestore()
-    .collection(collection)
-    .doc(docId.toString())
-    .delete()
-    .catch(err => Promise.reject(err));
-
 const addDocumentId = (collection, docId) =>
   firestore()
     .collection(collection)
@@ -258,14 +251,12 @@ export const observeCollectionItems = (
     // .orderBy('timestamp', 'asc')
     .onSnapshot(onResult, onError);
 
-export const removeDocument = (collection, docId) => {
-  console.log(collection, docId);
-  return firestore()
+export const removeDocument = (collection, docId) =>
+  firestore()
     .collection(collection)
     .doc(docId)
     .delete()
     .catch(err => Promise.reject(err));
-};
 
 export const massDocsDelete = async (collection, documentId, targetField) => {
   try {

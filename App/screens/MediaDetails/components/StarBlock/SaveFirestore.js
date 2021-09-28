@@ -39,8 +39,8 @@ export const SaveFirestore = React.memo(({mediaDetails}) => {
       setDisabled(true);
 
       await firebaseService
-        .saveMediaToForums('forums', id, {
-          documentId: id,
+        .saveMediaToForums('forums', id.toString(), {
+          documentId: id.toString(),
           creatorId: userData.uid,
           timestamp: Date.now(),
           title,
@@ -59,7 +59,7 @@ export const SaveFirestore = React.memo(({mediaDetails}) => {
     try {
       setDisabled(true);
       firebaseService
-        .removeDataFromForums('forums', id)
+        .removeDocument('forums', id.toString())
         .then(() => setIsSaved(false));
     } catch (error) {
       dispatch(actionsCommon.setError(utils.extractErrorMessage(error)));

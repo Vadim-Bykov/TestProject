@@ -9,7 +9,6 @@ import React, {
 import {
   Animated,
   StyleSheet,
-  View,
   KeyboardAvoidingView,
   FlatList,
   useWindowDimensions,
@@ -17,10 +16,9 @@ import {
   Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTheme} from '@react-navigation/native';
-import {BASE_IMAGE_URL, COLORS, DEFAULT_MOVIE_IMAGE} from '../../consts/consts';
+import {BASE_IMAGE_URL, DEFAULT_MOVIE_IMAGE} from '../../consts/consts';
 import * as firebaseService from '../../api/firebaseService';
 import * as utils from '../../utils/utils';
 import * as actionsCommon from '../../store/common/actions';
@@ -46,7 +44,7 @@ export const ForumScreen = ({navigation, route}) => {
 
   const removeForum = useCallback(async () => {
     try {
-      // firebaseService.removeDocument('forums', forumId);
+      firebaseService.removeDocument('forums', forumId.toString());
       firebaseService.massDocsDelete('messages', forumId, 'forumId');
       firebaseService.massDocsDelete('likes', forumId, 'forumId');
       firebaseService.massDocsDelete('dislikes', forumId, 'forumId');
@@ -55,7 +53,6 @@ export const ForumScreen = ({navigation, route}) => {
     } finally {
       navigation.goBack();
     }
-    console.log('Forum delete.');
   }, []);
 
   useLayoutEffect(() => {
@@ -78,17 +75,18 @@ export const ForumScreen = ({navigation, route}) => {
       delay: 300,
       useNativeDriver: true,
     }).start();
-  }, []);
+  }, [bgScale]);
 
-  const onResult = useCallback(querySnapshot => {
-    const tempStore = [];
-    if (querySnapshot.empty) return;
+  const onResult = useCallback(
+    querySnapshot => {
+      const tempStore = [];
 
-    querySnapshot.docs.forEach(document => tempStore.push(document.data()));
-    setMessages(utils.sortByTime(tempStore));
-  }, []);
+      querySnapshot.docs.forEach(document => tempStore.push(document.data()));
 
-  console.log(messages);
+      setMessages(utils.sortByTime(tempStore));
+    },
+    [setMessages],
+  );
 
   const onError = useCallback(error => {
     dispatch(actionsCommon.setError(utils.extractErrorMessage(error)));
@@ -136,7 +134,6 @@ export const ForumScreen = ({navigation, route}) => {
     [width, messages, dark],
   );
 
-  // const {bottom} = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
 
   return (
@@ -173,7 +170,6 @@ export const ForumScreen = ({navigation, route}) => {
       />
 
       <MessageInput forumId={forumId} userId={userData?.uid} />
-      {/* </View> */}
       {/* </KeyboardAvoidingView> */}
       {Platform.OS === 'ios' && <KeyboardSpacer topSpacing={-tabBarHeight} />}
     </>
