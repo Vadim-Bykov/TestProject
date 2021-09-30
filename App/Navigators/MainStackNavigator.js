@@ -14,6 +14,7 @@ import * as selectorsCommon from '../store/common/selectors';
 import {Error} from '../common/Error';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import * as utils from '../utils/utils';
+import {createNotificationChannels} from '../notification/configuration';
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,10 @@ export const MainStackNavigator = () => {
 
     return subscriber;
   }, []);
+
+  useEffect(() => {
+    isAuth && createNotificationChannels();
+  }, [isAuth]);
 
   return (
     <>

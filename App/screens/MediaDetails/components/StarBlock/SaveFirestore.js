@@ -8,6 +8,7 @@ import * as selectorsCommon from '../../../../store/auth/selectors';
 import {useRoute} from '@react-navigation/native';
 import * as utils from '../../../../utils/utils';
 import {COLORS} from '../../../../consts/consts';
+import {handleNewForumNotification} from '../../../../notification/notification';
 
 export const SaveFirestore = React.memo(({mediaDetails}) => {
   const dispatch = useDispatch();
@@ -39,6 +40,8 @@ export const SaveFirestore = React.memo(({mediaDetails}) => {
   }, []);
 
   const createForum = useCallback(async () => {
+    handleNewForumNotification(title, userData?.displayName, id);
+
     try {
       setDisabled(true);
 

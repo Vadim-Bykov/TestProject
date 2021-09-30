@@ -133,7 +133,7 @@ export const LikeComponent = React.memo(
       } else {
         addLike(1);
       }
-    }, [isLiked, isDisliked]);
+    }, [isLiked, isDisliked, addLike, addDislike]);
 
     const putDislike = useCallback(() => {
       if (isOwner) return warnOwner('dislike');
@@ -146,7 +146,7 @@ export const LikeComponent = React.memo(
       } else {
         addDislike(1);
       }
-    }, [isLiked, isDisliked]);
+    }, [isLiked, isDisliked, addLike, addDislike]);
 
     return (
       <>

@@ -18,6 +18,7 @@ import {useTheme} from '@react-navigation/native';
 import {SavedMediaStack} from './SavedMediaStack';
 import {SavedMediaGesture} from '../screens/SavedMediaGesture/SavedMediaGesture';
 import {ForumStackNavigator} from './ForumStackNavigator';
+import {WebsocketChatScreen} from '../screens/WebsocketCaht/WebsocketChatScreen';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -84,6 +85,9 @@ export const TabNavigator = () => {
           } else if (route.name === 'ForumsTab') {
             type = 'material-community';
             iconName = focused ? 'forum' : 'forum-outline';
+          } else if (route.name === 'WebsocketTab') {
+            type = 'material-community';
+            iconName = 'webrtc';
           }
 
           return <Icon type={type} name={iconName} size={size} color={color} />;
@@ -115,6 +119,9 @@ export const TabNavigator = () => {
             case 'ForumsTab':
               return focused && <MyText color={color}>Forums</MyText>;
 
+            case 'WebsocketTab':
+              return focused && <MyText color={color}>Web.io</MyText>;
+
             default:
               null;
           }
@@ -130,6 +137,7 @@ export const TabNavigator = () => {
       <Tab.Screen name="SavedMediaTab" component={SavedMediaStack} />
       <Tab.Screen name="SavedGestureTab" component={SavedMediaGesture} />
       <Tab.Screen name="ForumsTab" component={ForumStackNavigator} />
+      {/* <Tab.Screen name="WebsocketTab" component={WebsocketChatScreen} /> */}
       <Tab.Screen name="SettingsTab" component={Settings} />
     </Tab.Navigator>
   );

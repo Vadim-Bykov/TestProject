@@ -61,9 +61,6 @@ export const MessageItem = React.memo(
       }
     }, [item.docId]);
 
-    // console.log(new Date(messages[index].timestamp).getHours());
-    // console.log(new Date(messages[index].timestamp).getMinutes());
-
     const hours = new Date(messages[index].timestamp).getHours();
     const minutes = new Date(messages[index].timestamp).getMinutes();
 
@@ -76,8 +73,7 @@ export const MessageItem = React.memo(
     );
 
     const isToday = useMemo(
-      () =>
-        new Date().getDate() === new Date().getDate(messages[index].timestamp),
+      () => new Date().getDate() === new Date(item.timestamp).getDate(),
       [],
     );
 
@@ -88,18 +84,14 @@ export const MessageItem = React.memo(
 
     const isShowDate = useMemo(
       () =>
-        index === 0 ||
+        index === messages.length - 1 ||
         new Date(messages[index].timestamp).getDate() !==
-          new Date(messages[index - 1].timestamp).getDate(),
+          new Date(messages[index + 1].timestamp).getDate(),
       [],
     );
 
     return (
       <>
-        {isShowDate && (
-          <Text style={styles.date}>{isToday ? 'Today' : date}</Text>
-        )}
-
         <View
           style={[
             styles.container,
@@ -132,6 +124,9 @@ export const MessageItem = React.memo(
             AnchorComponent={MessageContent}
           />
         </View>
+        {isShowDate && (
+          <Text style={styles.date}>{isToday ? 'Today' : date}</Text>
+        )}
       </>
     );
   },

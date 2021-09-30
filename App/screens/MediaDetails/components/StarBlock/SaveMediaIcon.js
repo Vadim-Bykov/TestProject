@@ -3,7 +3,6 @@ import {StyleSheet, Text, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
 import * as tmdbService from '../../../../api/tmdbService';
-import * as firebaseService from '../../../../api/firebaseService';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import * as actionsCommon from '../../../../store/common/actions';
 import {useRoute} from '@react-navigation/native';
@@ -69,10 +68,6 @@ export const SaveMediaIcon = () => {
 
       onSettled: () => {
         queryClient.invalidateQueries('savedMediaList');
-
-        isSaved
-          ? firebaseService.saveMediaToForums(id, {forumCreator: 'userId'})
-          : null;
       },
     },
   );

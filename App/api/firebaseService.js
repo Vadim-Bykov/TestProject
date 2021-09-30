@@ -247,7 +247,7 @@ export const observeCollectionItems = (
   firestore()
     .collection(collection)
     .where(targetField, '==', targetId)
-    .limit(25)
+    .limit(100)
     // .orderBy('timestamp', 'asc')
     .onSnapshot(onResult, onError);
 

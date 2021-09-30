@@ -14,6 +14,8 @@ import {
   useWindowDimensions,
   Keyboard,
   Platform,
+  UIManager,
+  LayoutAnimation,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch, useSelector} from 'react-redux';
@@ -29,6 +31,12 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {DeleteForum} from './components/DeleteForum';
 import {MessageWithContextMenu} from './components/Message/MessageWithContextMenu';
+
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 export const ForumScreen = ({navigation, route}) => {
   const dispatch = useDispatch;
@@ -104,17 +112,21 @@ export const ForumScreen = ({navigation, route}) => {
     return subscriber;
   }, []);
 
-  const scrollToEnd = useCallback(() => {
-    messages?.length && flatListRef?.current?.scrollToEnd();
-  }, [flatListRef, messages]);
+  // const scrollToEnd = useCallback(() => {
+  //   messages?.length && flatListRef?.current?.scrollToEnd();
+  // }, [flatListRef, messages]);
 
-  useEffect(() => {
-    const subscriber = Keyboard.addListener('keyboardDidShow', () => {
-      setTimeout(scrollToEnd, 500);
-      // flatListRef.current.scrollToEnd()
-    });
+  // useEffect(() => {
+  //   const subscriber = Keyboard.addListener('keyboardDidShow', () => {
+  //     setTimeout(scrollToEnd, 500);
+  //     // flatListRef.current.scrollToEnd()
+  //   });
 
-    return subscriber.remove;
+  //   return subscriber.remove;
+  // }, [flatListRef, messages]);
+
+  const scrollToLastMessage = useCallback(() => {
+    flatListRef?.current?.scrollToOffset({offset: 0, animated: true});
   }, [flatListRef, messages]);
 
   const renderItem = useCallback(
@@ -135,6 +147,8 @@ export const ForumScreen = ({navigation, route}) => {
   );
 
   const tabBarHeight = useBottomTabBarHeight();
+
+  LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
   return (
     <>
@@ -166,7 +180,9 @@ export const ForumScreen = ({navigation, route}) => {
         renderItem={renderItem}
         contentContainerStyle={styles.flatListContainer}
         showsVerticalScrollIndicator={false}
-        onContentSizeChange={scrollToEnd}
+        // onContentSizeChange={scrollToEnd}
+        onContentSizeChange={scrollToLastMessage}
+        inverted
       />
 
       <MessageInput forumId={forumId} userId={userData?.uid} />
@@ -188,6 +204,7 @@ const styles = StyleSheet.create({
 
   flatListContainer: {
     flexGrow: 1,
+    justifyContent: 'flex-end',
   },
 
   linearGradient: {
